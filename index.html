@@ -28,8 +28,13 @@
   <script src="js/jquery.min.js" defer></script>
   <!-- Swiper 11 (jsDelivr): тоже defer и до script.js. Если CDN недоступен, афиши остаются видны и листаются обычной прокруткой -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11.2.10/swiper-bundle.min.js" integrity="sha384-2UI1PfnXFjVMQ7/ZDEF70CR943oH3v6uZrFQGGqJYlvhh4g6z6uVktxYbOlAczav" crossorigin="anonymous" defer></script>
+  <!-- Motion 12 (motion.dev, jsDelivr) — библиотека анимаций (бывший Framer Motion без React), даёт window.Motion.
+       Если CDN недоступен, сайт работает и выглядит так же, только без анимаций -->
+  <script src="https://cdn.jsdelivr.net/npm/motion@12.43.0/dist/motion.js" integrity="sha384-hgVFh5YKDMdpcWEjpRqk2kPXOKBH7I9NBCKe3uR6dHKgy/BWPe8kyL01kiYuRn1u" crossorigin="anonymous" defer></script>
   <!-- Общий скрипт: все интерактивные элементы, написан на jQuery (defer — выполнится после разбора страницы) -->
   <script src="js/script.js" defer></script>
+  <!-- Анимации появления, меню, окон и кнопок (на Motion) — после script.js -->
+  <script src="js/animations.js" defer></script>
   <!-- Данные о заведении для поисковиков (schema.org): без телефона и часов работы — их пока нет -->
   <script type="application/ld+json">
   {

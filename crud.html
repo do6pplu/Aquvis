@@ -25,8 +25,13 @@
   <!-- jQuery 3.7.1 (локальный файл js/jquery.min.js). Подключаем ПЕРЕД js/script.js и тоже с defer:
        defer-скрипты выполняются строго по порядку, поэтому $ уже есть, когда запускается script.js -->
   <script src="js/jquery.min.js" defer></script>
+  <!-- Motion 12 (motion.dev, jsDelivr) — библиотека анимаций (бывший Framer Motion без React), даёт window.Motion.
+       Если CDN недоступен, сайт работает и выглядит так же, только без анимаций -->
+  <script src="https://cdn.jsdelivr.net/npm/motion@12.43.0/dist/motion.js" integrity="sha384-hgVFh5YKDMdpcWEjpRqk2kPXOKBH7I9NBCKe3uR6dHKgy/BWPe8kyL01kiYuRn1u" crossorigin="anonymous" defer></script>
   <!-- Общий скрипт: все интерактивные элементы, написан на jQuery (defer — выполнится после разбора страницы) -->
   <script src="js/script.js" defer></script>
+  <!-- Анимации появления, меню, окон и кнопок (на Motion) — после script.js -->
+  <script src="js/animations.js" defer></script>
 </head>
 <body class="page page--crud">
 

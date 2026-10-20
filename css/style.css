@@ -4779,6 +4779,13 @@ textarea.field {
     display: none;
   }
 
+  /* «призрак» меню (js/animations.js): копия, которая плавно исчезает после закрытия */
+  .header--has-burger .header__nav.header__nav--ghost {
+    display: flex;
+    pointer-events: none;
+    animation: none;
+  }
+
   .header--has-burger .header__logo,
   .header--has-burger .header__actions,
   .header--has-burger .header__actions > *,
@@ -6414,5 +6421,44 @@ textarea.field {
 
   .promo__arrow:hover {
     transform: none;
+  }
+}
+
+/* ===================================================================
+   Анимации (js/animations.js, библиотека Motion). Класс js-motion у <html> ставит скрипт,
+   только если Motion загрузился и пользователь не просил уменьшить движение.
+   =================================================================== */
+/* окна появляются через Motion (пружинка) — CSS-появление отключаем, чтобы не было двух анимаций */
+html.js-motion .modal__overlay,
+html.js-motion .modal__window {
+  animation: none;
+}
+
+/* «волна» на кнопке: слой по размеру кнопки (обрезает круг по её скруглению) и сам круг */
+.ripple {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.ripple__dot {
+  position: absolute;
+  border-radius: 50%;
+  background-color: currentColor;   /* цвет текста кнопки: белая волна на тёмной, тёмная на светлой */
+}
+
+/* печать: всё, что ещё не «проявилось» при прокрутке, на бумаге видно сразу */
+@media print {
+  html.js-motion [style*="opacity"] {
+    opacity: 1 !important;
+  }
+
+  html.js-motion [style*="transform"] {
+    transform: none !important;
   }
 }
