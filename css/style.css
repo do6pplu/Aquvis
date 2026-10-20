@@ -4626,9 +4626,32 @@ textarea.field {
   }
 
   /* --- шапка: логотип, иконки и «бургер» в строку, меню раскрывается под ними --- */
+  /* Шапка прибита к верху экрана: sticky — место в потоке остаётся, контент под ней не прячется.
+     Снизу под полупрозрачным градиентом — сплошной цвет, чтобы страница не просвечивала */
   .header {
+    position: sticky;
+    top: 0;
+    z-index: 90;                 /* выше содержимого, ниже модальных окон (100) */
     height: auto;
     padding: 14px 0;
+    background-color: var(--sea-deep);
+  }
+
+  /* на главной шапка лежала поверх первого экрана (absolute) — теперь fixed: так же поверх,
+     но остаётся наверху при прокрутке (у первого экрана сверху уже есть отступ под шапку) */
+  .header--overlay {
+    position: fixed;
+    box-shadow: 0 4px 18px rgba(3, 30, 38, 0.45);
+  }
+
+  /* переход по якорю, scrollIntoView и фокус с клавиатуры: раздел или поле не прячутся под шапку.
+     Именно scroll-margin у содержимого, а не scroll-padding у <html>: с ним браузер считал бы
+     саму sticky-шапку «закрытой» и при фокусе на её кнопках прокручивал бы страницу */
+  main,
+  main *,
+  .footer,
+  .footer * {
+    scroll-margin-top: 96px;
   }
 
   .header__inner {
@@ -4778,9 +4801,9 @@ textarea.field {
   }
 
   /* пока меню открыто, страница под ним не прокручивается и не сдвигается
-     (место полосы прокрутки сохраняется — scrollbar-gutter) */
-  .is-nav-open,
-  .is-nav-open body {
+     (место полосы прокрутки сохраняется — scrollbar-gutter). Блокируем только <html>:
+     overflow: hidden у <body> сделал бы его отдельной прокруткой, и sticky-шапка уехала бы вверх */
+  .is-nav-open {
     overflow: hidden;
   }
 
@@ -4964,24 +4987,32 @@ textarea.field {
     width: 100%;
   }
 
+  /* стрелки — в строке с точками под афишами: поверх афиш они перекрывали края,
+     и свайп, начатый у края (там, где его обычно начинают), не срабатывал */
   .promo__arrow {
-    top: 196px;
+    top: auto;
+    bottom: 0;
     z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 72px;
+    width: 48px;
+    height: 40px;
     border-radius: 10px;
     background-color: rgba(5, 36, 48, 0.55);
   }
 
+  .promo__arrow svg {
+    width: 12px;
+    height: 30px;
+  }
+
   .promo__arrow--prev {
-    left: -8px;
+    left: 0;
   }
 
   .promo__arrow--next {
-    right: -8px;
+    right: 0;
   }
 
   .promo--home .dots,
@@ -6370,5 +6401,18 @@ textarea.field {
 
   .history__qty {
     margin-right: 12px;
+  }
+}
+
+/* Сенсорные экраны (телефон, планшет): наведения мышью нет, а «залипший» после касания :hover
+   поднимал афишу под пальцем во время свайпа — эффект наведения здесь отключаем */
+@media (max-width: 1023.98px) and (hover: none) {
+  .promo__link:hover {
+    transform: none;
+    box-shadow: 0 15px 22px rgba(0, 0, 0, 0.25);
+  }
+
+  .promo__arrow:hover {
+    transform: none;
   }
 }

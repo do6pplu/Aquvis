@@ -535,26 +535,19 @@ $(function () {
      ================================================================ */
   // Слайдер — Swiper 11 (подключён с jsDelivr в index.html), стандартная разметка:
   // .swiper > .swiper-wrapper > .swiper-slide, стрелки .swiper-button-prev/next, точки .swiper-pagination.
-  // Свайп пальцем на телефонах, стрелки и точки — на всех экранах; «по кругу» (rewind), как было раньше.
-  // Видно столько афиш, сколько помещается по ширине из CSS: десктоп 4, планшет 2, телефон 1.
+  // Обычная настройка Swiper: по 1 афише на телефоне, по 2 на планшете, по 4 на десктопе (breakpoints),
+  // свайп пальцем (и перетаскивание мышью), стрелки и точки; «по кругу» (rewind), как было раньше.
   // Если CDN недоступен, Swiper не запускается: афиши остаются видны и листаются обычной прокруткой (см. CSS).
   $('.js-promo-slider').each(function () {
     const $section = $(this);
     const $viewport = $section.find('.swiper').first();
     const $slides = $viewport.find('.swiper-slide');
     if (typeof window.Swiper !== 'function' || !$viewport.length) return;
-    let visible = 4;
-    const desktop = window.matchMedia('(min-width: 1024px)');
-
-    // сколько афиш помещается в «окне»
-    const countVisible = () => {
-      const step = $slides.first().outerWidth() + 22;
-      visible = Math.max(1, Math.round(($viewport.innerWidth() + 22) / step));
-    };
 
     // доступность: видимые афиши можно «потрогать» с клавиатуры, скрытые — нет; у активной точки aria-current
     const mark = (swiper) => {
       const index = swiper.snapIndex;
+      const visible = swiper.params.slidesPerView;
       $slides.each(function (i) {
         const shown = i >= index && i < index + visible;
         $(this).attr('aria-hidden', String(!shown));
@@ -565,12 +558,21 @@ $(function () {
       });
     };
 
+    // пока Swiper грузился, «окно» могли прокрутить пальцем (запасной режим) — сбрасываем,
+    // иначе сдвиг прокрутки сложился бы со сдвигом ленты
+    $viewport[0].scrollLeft = 0;
+
     new window.Swiper($viewport[0], {
-      slidesPerView: 'auto',             // ширина афиши — из CSS
+      slidesPerView: 1,
       spaceBetween: 22,                  // тот же промежуток, что был (gap 22px)
-      speed: 500,                        // та же скорость, что была (0,5 с)
+      speed: 350,                        // после свайпа лента доезжает быстро
+      threshold: 0,                      // лента идёт ровно за пальцем, без «отставания» на старте
       rewind: true,                      // с последней позиции стрелка «вперёд» возвращает к первой (и наоборот)
-      simulateTouch: false,              // мышью ленту не тянем — на десктопе всё как раньше (стрелки, точки)
+      grabCursor: true,
+      breakpoints: {
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 4, speed: 500 },   // десктоп: как раньше — 4 афиши, сдвиг за 0,5 с
+      },
       a11y: { enabled: false },          // доступность настроена своими атрибутами (aria-label, aria-hidden, tabIndex)
       navigation: {
         // стрелки стоят вне .swiper (иначе «окно» их обрежет), поэтому передаём сами элементы
@@ -588,21 +590,12 @@ $(function () {
       on: {
         init(swiper) {
           $section.addClass('promo--swiper');   // стрелки показываются только у рабочего слайдера
-          countVisible();
           mark(swiper);
-        },
-        // на десктопе сдвиг ленты — обычный 2D translateX, как у прежней карусели:
-        // translate3d от Swiper выносит ленту в отдельный слой, и края афиш сглаживаются чуть иначе
-        setTranslate(swiper, translate) {
-          if (desktop.matches) swiper.wrapperEl.style.transform = `translateX(${translate}px)`;
         },
         // лента встала на новую позицию (стрелка, точка или свайп)
         snapIndexChange: mark,
-        // поворот экрана / смена ширины: пересчитать, сколько афиш видно
-        resize(swiper) {
-          countVisible();
-          mark(swiper);
-        },
+        // поворот экрана / смена ширины: другое число афиш в «окне»
+        breakpoint: (swiper) => setTimeout(() => mark(swiper)),
       },
     });
   });
