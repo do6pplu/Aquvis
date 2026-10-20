@@ -1,0 +1,4516 @@
+/* ===================================================================
+   Общий файл стилей для всех страниц сайта «Аквамарин» (на основе вёрстки delivery-eat)
+   Макет: как у delivery-eat, ширина 1600px, контент — 1190px по центру.
+
+   Порядок разделов в файле:
+     1. Шрифты (@font-face) и переменные
+     2. Сброс и общие элементы (кнопки, цены, точки)
+     3. Шапка (+ выпадающее меню «Еще...», кнопка корзины)
+     4. Главная: первый экран, «О нас», «Новости и акции», «Покушать», контакты
+     5. Подвал
+     6. Меню и Барная карта: вкладки, категории, поиск, фильтры, карточки
+     7. Общие блоки внутренних страниц: заголовок, всплывающие окна, формы
+     8. Корзина, 9. Заказ, 10. Фотоотчёты, 12. Личный кабинет,
+     13. CRUD
+   =================================================================== */
+
+/* ===== 1. Шрифты =====
+   Два шрифта, оба лежат локально в папке fonts/ (лицензия SIL OFL: fonts/OFL.txt, fonts/OFL-Comfortaa.txt):
+     Nunito    — основной текст, кнопки, меню, поля ввода (400–800, обычный и курсив);
+     Comfortaa — заголовки h1–h3, логотип, крупные надписи афиш (400–700).
+   Файлы — вариативные woff2 с Google Fonts, по подмножествам: латиница, кириллица, расширенная кириллица.
+   unicode-range: браузер скачивает только те файлы, символы из которых есть на странице.
+   font-display: swap — пока шрифт грузится, текст виден системным шрифтом. */
+
+@font-face {
+  font-family: "Nunito";
+  font-style: italic;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("../fonts/nunito-cyrillic-ext-italic.woff2") format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Nunito";
+  font-style: italic;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("../fonts/nunito-cyrillic-italic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Nunito";
+  font-style: italic;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("../fonts/nunito-latin-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("../fonts/nunito-cyrillic-ext.woff2") format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("../fonts/nunito-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("../fonts/nunito-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Comfortaa";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../fonts/comfortaa-cyrillic-ext.woff2") format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Comfortaa";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../fonts/comfortaa-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Comfortaa";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../fonts/comfortaa-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ===== Переменные: цвета, шрифты и размеры из макета ===== */
+:root {
+  --color-bg: #0a3a46;            /* основной тёмный фон страницы */
+  --color-bg-dark: #072a33;       /* фон карточек и подвала */
+  --color-red: #0b7a6c;           /* фирменный красный: кнопки, фон блока акций */
+  --color-red-glow: #3fd9c0;      /* красный для свечения и логотипа */
+  --color-green: #6dab58;         /* зелёный: «Вегетарианские блюда» */
+  --color-white: #ffffff;
+  --color-gray: #a9c9cf;          /* серый текст абзацев */
+  --color-gray-light: #c3dde1;    /* рамка и текст поля поиска */
+  --color-gray-line: #4f7a82;     /* неактивные полоски, стрелки, крестики */
+  --color-gray-muted: #a9c9cf;    /* неактивная вкладка «Бар» / «Основное меню» (контраст к фону ≥ 4.5:1) */
+  --color-footer-text: #9fc4c9;   /* мелкий текст подвала */
+  --color-footer-link: #e3f4f2;   /* ссылки подвала */
+  --color-btn-dark: #08303a;      /* тёмная кнопка с телефоном */
+
+  /* Шрифты (см. @font-face выше) */
+  --font-main: "Nunito", sans-serif;        /* основной текст, кнопки, меню, поля */
+  --font-accent: "Comfortaa", sans-serif;    /* заголовки, логотип, крупные надписи */
+
+  --container: 1190px;            /* ширина контентной сетки (205px...1395px в макете) */
+  --radius: 5px;                  /* скругление обычных кнопок */
+  --radius-card: 25px;            /* скругление карточек блюд */
+
+  /* тема «Аквамарин»: =================================================================== ТЕМА «АКВАМАРИН» (морская вода). Вся палитра — в переменных ниже: поменяли значение — поменялся сайт. Контраст текста проверен по WCAG AA (не ниже 4.5:1): белый на --color-red #0b7a6c — 5.2:1; белый на --color-bg — 12.3:1; --card-text на --card-bg — 11.7:1; --card-accent на --card-bg — 5.0:1. =================================================================== */
+  --sea-surface: #11606d;     /* верх страницы — «поверхность воды» */
+  --sea-mid: #0a3a46;         /* середина */
+  --sea-deep: #052430;        /* низ — «глубина» */
+  --aqua: #3fd9c0;            /* светлый аквамарин: логотип, свечение */
+  --aqua-soft: #7fe3d1;
+  --header-bg: linear-gradient(180deg, rgba(5, 36, 48, 0.96) 0%, rgba(10, 58, 70, 0.9) 100%);
+  --footer-bg: #041f27;
+  --card-bg: #0e3d49;         /* карточки блюд и напитков: чуть светлее морского фона */
+  --card-border: rgba(127, 227, 209, 0.16);
+  --card-border-hover: rgba(127, 227, 209, 0.45);
+  --card-text: #eef9f7;       /* название */
+  --card-muted: #b3d3cf;      /* описание, ккал/БЖУ */
+  --card-accent: #7fe3d1;     /* метки */
+  --card-shadow: 0 6px 18px rgba(2, 18, 24, 0.35);
+  --card-shadow-hover: 0 10px 24px rgba(2, 18, 24, 0.45);
+  --glow-red: 0 0 15px rgba(63, 217, 192, 0.6);   /* бывшее «красное свечение» кнопок */
+  --ph-bg: #cfe7e3;
+}
+
+/* ===== Сброс стандартных стилей браузера ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-width: 1240px;              /* сайт свёрстан под десктоп, на узких экранах — прокрутка */
+  font-family: var(--font-main);
+  font-size: 18px;
+  line-height: 1.27;
+  letter-spacing: -0.02em;        /* лёгкое сжатие букв, как было в макете */
+  color: var(--color-white);
+  -webkit-font-smoothing: antialiased;
+
+  /* тема «Аквамарин»: 1) Фон страницы: морской градиент + волны (SVG прямо в CSS, без внешних картинок) */
+  background-color: var(--sea-mid);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='40' viewBox='0 0 160 40'%3E%3Cpath d='M0 20 Q20 8 40 20 T80 20 T120 20 T160 20' fill='none' stroke='%237fe3d1' stroke-opacity='0.07' stroke-width='2'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, var(--sea-surface) 0%, var(--sea-mid) 35%, var(--sea-deep) 100%);
+  background-repeat: repeat, no-repeat;
+  background-size: 160px 40px, 100% 100%;
+}
+
+.btn,
+.price,
+.promo__title,
+.about__title,
+.eat__title,
+.contacts__title,
+.card__title,
+.dish__title,
+.dish__price,
+.dish__tags,
+.tag,
+.btn-small,
+.btn-more,
+.btn-cart,
+.video-badge__label {
+  letter-spacing: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Встроенные SVG-иконки ведут себя как картинки */
+svg {
+  display: block;
+  max-width: 100%;
+  flex-shrink: 0;
+}
+
+/* ===== Заглушка вместо фото (фото блюд и т. п. добавим позже) =====
+   Размер берётся из переменных в атрибуте style: --w (ширина) и --ar (пропорции),
+   поэтому вёрстка остаётся такой же, как с картинкой. */
+.ph {
+  display: block;
+  width: var(--w, 100%);
+  max-width: 100%;
+  aspect-ratio: var(--ar, 4 / 3);
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.35) 0 12px, transparent 12px 24px),
+    var(--ph-bg, #cfe7e3);
+  overflow: hidden;
+}
+
+/* Фото пользователя обрезаются по рамке, а не растягиваются */
+.user-photo {
+  object-fit: cover;
+}
+
+/* Фото входа (img/hello.webp, портрет 3:4) в большой ячейке «Наше заведение»:
+   кадр сдвинут так, чтобы вывеска «кафе аквамарин» оставалась видна */
+.user-photo--hello {
+  object-position: 70% 45%;
+}
+
+/* Логотип: пока текстом «Аквамарин» */
+.logo-text {
+  display: inline-block;
+  font-family: var(--font-accent);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  /* тема «Аквамарин» */
+  color: var(--aqua);
+  text-shadow: 0 0 14px rgba(63, 217, 192, 0.55);
+}
+
+.logo-text--footer {
+  font-size: 40px;
+}
+
+/* Неактивные ссылки подвала (<a> без href): выглядят как обычные, но никуда не ведут (попапы — позже) */
+.footer__link:not([href]) {
+  cursor: default;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;                  /* поля и кнопки — тем же шрифтом, что и страница (иначе у textarea моноширинный) */
+  color: inherit;
+  border: none;
+  background: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Заголовки — вторым шрифтом (Comfortaa); размеры и жирность задают классы ниже */
+h1,
+h2,
+h3 {
+  font-family: var(--font-accent);
+}
+
+/* Атрибут hidden всегда прячет элемент (даже если у класса задан display) */
+[hidden] {
+  display: none !important;
+}
+
+/* Видимая рамка фокуса для навигации с клавиатуры */
+:focus-visible {
+  outline: 2px solid var(--color-white);
+  outline-offset: 3px;
+}
+
+/* Текст только для экранных дикторов (на экране не виден) */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ===== Общие элементы ===== */
+
+/* Контейнер 1190px по центру */
+.container {
+  position: relative;
+  width: var(--container);
+  margin: 0 auto;
+}
+
+/* Красная полоска над заголовками блоков (73×5 со свечением) */
+.bar {
+  display: block;
+  width: 73px;
+  height: 5px;
+  border-radius: 3px;
+  /* мягкая полоска: аквамарин, гаснущий к концам (сильнее вправо), без резких краёв */
+  background: linear-gradient(90deg, rgba(63, 217, 192, 0.15) 0%, rgba(63, 217, 192, 0.7) 22%, rgba(63, 217, 192, 0.45) 60%, rgba(63, 217, 192, 0) 100%);
+  box-shadow: 0 0 8px rgba(63, 217, 192, 0.18);
+}
+
+/* Красная кнопка (базовая) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--color-red);
+  border-radius: var(--radius);
+  background-color: var(--color-red);
+  color: var(--color-white);
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+/* Наведение: кнопка темнеет и начинает светиться */
+.btn:hover {
+  background-color: #096b5f;
+  box-shadow: var(--glow-red);
+}
+
+/* «Забронировать» в шапке: 179×50 */
+.btn--header {
+  width: 179px;
+  height: 50px;
+  font-size: 16px;
+}
+
+/* Большие кнопки первого экрана: 386×74 */
+.btn--big {
+  width: 386px;
+  height: 74px;
+  border-radius: 7.4px;
+  font-size: 23.68px;
+  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Белая кнопка с красным текстом */
+.btn--white {
+  border-color: var(--color-white);
+  background-color: var(--color-white);
+  color: var(--color-red);
+}
+
+.btn--white:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+/* «Онлайн бронирование» в контактах: 353×50 */
+.btn--wide {
+  width: 353px;
+  height: 50px;
+  font-size: 18px;
+}
+
+/* Ссылка со стрелкой («Подробнее →», «Смотреть меню →») */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 17px;
+  font-size: 18px;
+  line-height: 23px;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.56);
+  transition: color 0.2s;
+}
+
+.link-arrow::after {
+  content: "";
+  width: 54px;
+  height: 8px;
+  background: url("data:image/svg+xml,%3Csvg width=%2254%22 height=%228%22 viewBox=%220 0 54 8%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath d=%22M0 3.71629L-4.41199e-08 4.22097L53.4953 4.22097L53.4953 3.7163L53.4953 3.21163L4.41199e-08 3.21162L0 3.71629ZM53.8522 4.07316C54.0493 3.87607 54.0493 3.55653 53.8522 3.35944L50.6405 0.147723C50.4434 -0.049364 50.1238 -0.0493641 49.9267 0.147723C49.7297 0.34481 49.7297 0.664351 49.9267 0.861438L52.7816 3.7163L49.9267 6.57116C49.7297 6.76825 49.7297 7.08779 49.9267 7.28488C50.1238 7.48196 50.4434 7.48196 50.6405 7.28488L53.8522 4.07316Z%22 fill=%22white%22/%3E %3C/svg%3E") no-repeat center / contain;
+  transition: transform 0.2s;
+}
+
+.link-arrow:hover {
+  color: var(--color-red);
+}
+
+.link-arrow:hover::after {
+  transform: translateX(6px);
+}
+
+/* Цена «359₽/100г.»: крупные цифры и мелкая приписка */
+.price {
+  font-size: 36px;
+  line-height: 42px;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.price small {
+  line-height: 1;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* Точки слайдера (большая тёмная — активная, маленькие белые — остальные) */
+.dots {
+  position: absolute;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transform: translateX(-50%);
+}
+
+.dots li {
+  display: flex;
+}
+
+.dots__item {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-white);
+}
+
+.dots__item--active {
+  width: 13px;
+  height: 13px;
+  margin-right: 2px;
+  background-color: #0b333d;
+}
+
+.dots__item:not(.dots__item--active):hover {
+  background-color: #0b333d;
+}
+
+/* ===== Шапка ===== */
+.header {
+  position: relative;
+  z-index: 10;
+  height: 144px;                  /* на странице меню красный блок начинается с 144px */
+  padding-top: 34px;
+
+  /* тема «Аквамарин»: 2) Шапка: тёмно-морская полоса, светлая линия-«пена» снизу, логотип аквамариновым */
+  background: var(--header-bg);
+  border-bottom: 1px solid rgba(127, 227, 209, 0.35);
+  box-shadow: 0 4px 18px rgba(3, 30, 38, 0.45);
+}
+
+/* На главной шапка лежит поверх первого экрана */
+.header--overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+
+  /* тема «Аквамарин» */
+  background: linear-gradient(180deg, rgba(5, 36, 48, 0.85) 0%, rgba(5, 36, 48, 0) 100%);
+  border-bottom: 0;
+  box-shadow: none;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  height: 51px;
+}
+
+.header__logo {
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+}
+
+.header__logo:hover {
+  opacity: 0.85;
+}
+
+.header__nav {
+  margin-left: auto;              /* меню прижато к кнопкам справа */
+
+  /* тема «Аквамарин» */
+  padding-left: 24px;   /* отступ от логотипа; margin-left: auto (прижатие вправо) остаётся */
+}
+
+.nav {
+  display: flex;
+
+  /* тема «Аквамарин» */
+  gap: 20px;
+}
+
+.nav__link {
+  line-height: 21px;
+  transition: color 0.2s;
+
+  /* тема «Аквамарин» */
+  font-size: 17px;
+}
+
+.header__actions {
+  display: flex;
+  gap: 16px;
+  margin-left: 42px;
+}
+
+/* Квадратные кнопки-иконки 50×50 */
+.icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 7.58px;
+  box-shadow: 0 0 15px rgba(63, 217, 192, 0.5);
+  transition: box-shadow 0.2s, background-color 0.2s;
+}
+
+.icon-btn:hover {
+  box-shadow: 0 0 20px var(--color-red-glow);
+}
+
+/* Кнопка-телефон в шапке: сама кнопка невидима (прозрачный фон, без рамки и тени). Светится сама трубка —
+   по контуру: тонкая (0,8px) аквамариновая обводка пути + три слоя drop-shadow.
+   Радиус свечения ≤ 6px, иконка 28px в кнопке 50px — свет не выходит за края кнопки */
+.icon-btn--dark,
+.icon-btn--dark:hover,
+.icon-btn--dark:focus-visible {
+  border: none;
+  background: transparent;    /* «под цвет фона»: сквозь кнопку виден фон шапки / первого экрана */
+  box-shadow: none;
+}
+
+.icon-btn--dark:focus:not(:focus-visible) {
+  outline: none;              /* рамка фокуса только для клавиатуры (:focus-visible — общее правило) */
+}
+
+.icon-btn--dark svg {
+  filter:
+    drop-shadow(0 0 1px rgba(127, 227, 209, 0.95))
+    drop-shadow(0 0 2.5px rgba(63, 217, 192, 0.8))
+    drop-shadow(0 0 5px rgba(63, 217, 192, 0.55));
+  transition: filter 0.2s;
+}
+
+.icon-btn--dark svg path {
+  stroke: var(--aqua);
+  stroke-width: 0.8px;
+  stroke-linejoin: round;
+}
+
+.icon-btn--dark:hover svg {
+  filter:
+    drop-shadow(0 0 1px rgba(127, 227, 209, 1))
+    drop-shadow(0 0 3px rgba(63, 217, 192, 0.95))
+    drop-shadow(0 0 6px rgba(63, 217, 192, 0.75));
+}
+
+.icon-btn--red {
+  background-color: var(--color-red);
+}
+
+/* Иконка пользователя собрана из двух частей: голова и плечи */
+.icon-btn__head {
+  position: absolute;
+  top: 11px;
+  left: 19px;
+}
+
+.icon-btn__body {
+  position: absolute;
+  top: 24px;
+  left: 14px;
+}
+
+/* ===== Первый экран (только на главной) ===== */
+.hero {
+  position: relative;
+  height: 940px;
+  overflow: hidden;
+
+  /* тема «Аквамарин»: фото + морская дымка — в слое .hero::before (см. «Плавные переходы» в конце файла) */
+}
+
+/* Большой логотип на первом экране — фото неоновой вывески «Аквамарин» (рамка 908×570 по пропорциям фото).
+   Края картинки плавно растворяются в фоне (mask-image) */
+.hero__title {
+  position: absolute;
+  top: 110px;
+  left: 50%;
+  width: 908px;           /* пропорции фото 604×379 при высоте 570px — рамка совпадает с картинкой */
+  height: 570px;
+  max-width: none;
+  transform: translateX(-50%);
+  /* края плавно растворяются в фоне: слева и справа широкая растушёвка (~20% ширины), сверху и снизу ~18%;
+     две маски перемножаются (intersect), поэтому углы тоже мягкие */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.12) 4%, rgba(0, 0, 0, 0.38) 9%, rgba(0, 0, 0, 0.7) 14%, #000 20%, #000 80%, rgba(0, 0, 0, 0.7) 86%, rgba(0, 0, 0, 0.38) 91%, rgba(0, 0, 0, 0.12) 96%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 6%, rgba(0, 0, 0, 0.75) 12%, #000 18%, #000 82%, rgba(0, 0, 0, 0.75) 88%, rgba(0, 0, 0, 0.3) 94%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.12) 4%, rgba(0, 0, 0, 0.38) 9%, rgba(0, 0, 0, 0.7) 14%, #000 20%, #000 80%, rgba(0, 0, 0, 0.7) 86%, rgba(0, 0, 0, 0.38) 91%, rgba(0, 0, 0, 0.12) 96%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 6%, rgba(0, 0, 0, 0.75) 12%, #000 18%, #000 82%, rgba(0, 0, 0, 0.75) 88%, rgba(0, 0, 0, 0.3) 94%, transparent 100%);
+  mask-composite: intersect;
+  /* при дробном масштабе (зум 75/90/125%) край слоя с маской давал тёмную вертикальную линию 1px;
+     крайний пиксель и так прозрачен по маске — срезаем его */
+  clip-path: inset(1px);
+}
+
+.hero__buttons {
+  position: absolute;
+  top: 692px;
+  left: 50%;
+  display: flex;
+  gap: 48px;
+  transform: translateX(-50%);
+}
+
+/* ===== О нашем заведении ===== */
+.about {
+  padding-top: 9px;
+  padding-bottom: 122px;
+}
+
+.about__inner {
+  display: flex;
+  justify-content: space-between;
+}
+
+.about__content {
+  position: relative;
+  width: 577px;
+}
+
+.about__title {
+  margin-top: 9px;
+  font-size: 40px;
+  line-height: 53px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.32);
+}
+
+.about__title-big {
+  display: block;
+  font-size: 52px;
+}
+
+.about__text {
+  margin-top: 73px;
+  font-size: 18px;
+  line-height: 23px;
+  color: var(--color-gray);
+}
+
+/* пустая строка между абзацами, как в макете */
+.about__text p + p {
+  margin-top: 23px;
+}
+
+.about__more {
+  display: inline-block;
+  margin-top: 30px;
+  font-size: 18px;
+  line-height: 23px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+
+.about__more:hover {
+  color: var(--color-red);
+}
+
+.about__gallery {
+  display: flex;
+  flex-direction: column;
+  width: 536px;
+  padding-top: 36px;
+}
+
+.about__img {
+  width: 536px;
+  height: 376px;
+  margin-top: 32px;
+  border-radius: 15px;
+  object-fit: cover;
+  transition: opacity 0.25s;   /* фото в слайдере «О нас» плавно сменяются */
+}
+
+/* Полоски и стрелки под фото */
+.about__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 2px;
+  margin-top: 19px;
+  padding: 0 8px 0 9px;
+}
+
+.lines {
+  display: flex;
+  gap: 8px;
+}
+
+.lines__item {
+  width: 59px;
+  height: 2px;
+  border-radius: 100px;
+  background-color: var(--color-gray-line);
+}
+
+.lines__item--active {
+  background-color: #0b7a6c;
+  box-shadow: 0 0 10px #0b7a6c;
+}
+
+.about__arrows {
+  display: flex;
+  gap: 19px;
+}
+
+.about__arrow {
+  display: block;
+  padding: 6px 0;
+  transition: transform 0.2s;
+}
+
+.about__arrow:hover {
+  transform: scale(1.1);
+}
+
+.about__arrow--next :is(img, svg, .ph) {
+  filter: drop-shadow(0 0 5px #0b7a6c);
+}
+
+/* ===== Красный блок «Новости и акции» (обе страницы) ===== */
+.promo {
+  background: var(--color-red);
+}
+
+.promo--home {
+  position: relative;     /* для слоя-фона ::before с плавными краями (см. «Плавные переходы») */
+  height: 512px;
+  padding-top: 31px;
+  background: none;
+}
+
+.promo__inner {
+  height: 100%;
+}
+
+.promo__title {
+  font-size: 30px;
+  line-height: 35px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* «Окно» карусели: обрезает ленту только слева и справа, тени сверху и снизу видны */
+.promo__viewport {
+  margin-top: 33px;
+  clip-path: inset(-40px 0 -60px 0);
+  overflow-x: clip;               /* лента не создаёт горизонтальную прокрутку страницы (clip, а не hidden — тени сверху/снизу остаются) */
+}
+
+/* Лента афиш: script.js сдвигает её через transform */
+.promo__list {
+  display: flex;
+  gap: 22px;                      /* (1190 − 4 × 281) / 3 */
+  transition: transform 0.5s ease;
+}
+
+.promo__card {
+  flex-shrink: 0;
+}
+
+/* Афиша — кнопка: открывает окно с подробностями акции */
+.promo__link {
+  display: block;
+  overflow: hidden;
+  border-radius: 37.7px;
+  box-shadow: 0 15px 22px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.promo__link:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Стрелки слева и справа от ленты */
+.promo__arrow {
+  position: absolute;
+  top: 248px;
+  transition: transform 0.2s;
+}
+
+.promo__arrow--prev {
+  left: -37px;
+}
+
+.promo__arrow--next {
+  right: -37px;
+}
+
+.promo__arrow:hover {
+  transform: scale(1.15);
+}
+
+/* Белая стрелка при наведении (как в UI Kit); стрелки теперь встроенные SVG, а не <img> */
+.promo__arrow:hover svg {
+  filter: brightness(0) invert(1);
+}
+
+.promo--home .dots {
+  top: 452px;
+}
+
+/* ===== «Что у нас можно покушать?» ===== */
+/* Три колонки: большое фото тарелки | заголовок, текст, ссылка | два маленьких фото друг под другом */
+.eat {
+  height: 436px;          /* ~60% прежней высоты (727px) */
+  margin-bottom: 64px;    /* отступ, чтобы блок не прилипал к «Контактам» */
+}
+
+.eat__inner {
+  display: grid;
+  grid-template-columns: 500px minmax(300px, 1fr) 210px;
+  align-items: center;
+  column-gap: 40px;
+  height: 100%;
+}
+
+/* Общая рамка всех трёх фото: скругление, аквамариновое свечение, мягкий цветовой тон,
+   края кадра плавно уходят в тёмно-морской (внутренняя тень в ::after) */
+.eat__photo {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 0 28px rgba(63, 217, 192, 0.32), 0 10px 30px rgba(3, 30, 38, 0.5);
+  transition: box-shadow 0.3s;
+}
+
+.eat__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.9) contrast(1.04) brightness(0.97);
+  transition: transform 0.4s;
+}
+
+.eat__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, rgba(63, 217, 192, 0.1) 0%, rgba(10, 58, 70, 0.16) 100%);
+  box-shadow: inset 0 0 36px 10px rgba(10, 58, 70, 0.7);
+  pointer-events: none;
+}
+
+/* Тарелка: картинка выше рамки на 35% и прижата к низу (user-photo--crop-top) — белая полоса
+   с подписью вверху снимка уходит за край рамки */
+.eat__photo--plate {
+  height: 420px;
+}
+
+.eat__photo--plate .eat__img {
+  height: 135%;
+  object-position: center bottom;
+}
+
+.eat__side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.eat__photo--small {
+  height: 200px;
+}
+
+.eat__photo--small:hover,
+.eat__photo--small:focus-visible {
+  box-shadow: 0 0 36px rgba(63, 217, 192, 0.6), 0 10px 30px rgba(3, 30, 38, 0.5);
+}
+
+.eat__photo--small:hover img {
+  transform: scale(1.05);
+}
+
+.eat__content {
+  min-width: 300px;
+}
+
+.eat__title {
+  margin-top: 8px;
+  font-size: 34px;
+  line-height: 51px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.32);
+}
+
+.eat__title-big {
+  display: block;
+  font-size: 52px;
+}
+
+.eat__text {
+  margin-top: 28px;
+  font-size: 18px;
+  line-height: 23px;
+  color: var(--color-gray);
+}
+
+.eat__link {
+  margin-top: 32px;
+  gap: 22px;
+}
+
+/* ===== Контакты ===== */
+.contacts {
+  height: 564px;
+}
+
+.contacts__title {
+  font-size: 48px;
+  line-height: 56px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.contacts__body {
+  display: flex;
+  margin-top: 25px;
+}
+
+.contacts__info {
+  width: 485px;
+  height: 444px;
+  padding-top: 26px;
+}
+
+.contacts__subtitle {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+.contacts__subtitle--booking {
+  margin-top: 44px;
+  margin-bottom: 25px;
+}
+
+.contacts__list {
+  display: flex;
+  flex-direction: column;
+  gap: 29px;
+  margin-top: 30px;
+}
+
+.contacts__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+  padding-left: 61px;
+}
+
+.contacts__item--address {
+  min-height: 39px;
+}
+
+/* Иконки: SVG содержит запас под свечение, поэтому сдвигаем их отрицательно */
+.contacts__icon {
+  position: absolute;
+  top: 50%;
+  max-width: none;
+  transform: translateY(-50%);
+}
+
+.contacts__icon--phone {
+  left: -30px;
+}
+
+.contacts__icon--mail {
+  left: -29px;
+  margin-top: 3px;
+}
+
+.contacts__icon--pin {
+  left: -27px;
+}
+
+.contacts__link {
+  font-size: 24px;
+  line-height: 28px;
+}
+
+a.contacts__link {
+  transition: color 0.2s;
+}
+
+a.contacts__link:hover {
+  color: var(--color-red);
+}
+
+/* Соцсети в контактах */
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 21px;
+  margin-top: 32px;
+  padding-left: 3px;
+}
+
+.socials__link {
+  display: block;
+  transition: transform 0.2s, filter 0.2s;
+}
+
+.socials__link:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 6px var(--color-red));
+}
+
+.contacts__map-wrap {
+  margin-left: 71px;
+}
+
+.contacts__map {
+  position: relative;
+  width: 616px;
+  height: 385px;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.contacts__map :is(img, svg, .ph) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Спутниковый снимок с красной отметкой кафе: настоящие цвета — без фильтров и цветного слоя.
+   Размер, скругление и тень остаются от .contacts__map */
+.contacts__map--photo :is(img, svg, .ph) {
+  object-position: 50% 35%;       /* отметка кафе (~52% по x, ~33% по y снимка) остаётся в кадре */
+}
+
+.contacts__hours {
+  margin-top: 30px;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  word-spacing: 0;
+}
+
+.contacts__hours b {
+  margin-right: 22px;
+}
+
+/* ===== Подвал ===== */
+.footer {
+  height: 158px;
+
+  /* тема «Аквамарин»: 3) Подвал: цвет «глубины» и волнистый верхний край (SVG-волна в CSS) */
+  position: relative;
+  margin-top: 40px;
+  background: var(--footer-bg);
+}
+
+.footer__inner {
+  display: flex;
+  height: 100%;
+}
+
+.footer__brand {
+  width: 454px;
+  padding-top: 34px;
+}
+
+.footer__middle {
+  padding-top: 45px;
+}
+
+/* Ссылки подвала — 3 колонки по 2 строки */
+.footer__nav {
+  font-size: 16px;
+  line-height: 19px;
+  display: grid;
+  grid-template-columns: 149px 164px auto;
+  row-gap: 15px;
+}
+
+/* третья колонка в макете опущена на 4px */
+.footer__nav-shift {
+  transform: translateY(4px);
+}
+
+.footer__link {
+  font-size: 16px;
+  line-height: 19px;
+  color: var(--color-footer-link);
+  transition: color 0.2s;
+}
+
+.footer__link:hover {
+  color: var(--color-red);
+}
+
+.footer__note {
+  margin-top: 30px;
+  margin-left: 13px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 300;
+  color: var(--color-footer-text);
+}
+
+.footer__contacts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+  padding-top: 41px;
+  padding-right: 1px;
+}
+
+.footer__phone {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--color-red-glow);
+  transition: color 0.2s;
+}
+
+.footer__phone:hover {
+  color: var(--color-white);
+}
+
+.footer__hours {
+  margin-top: 5px;
+  font-size: 12px;
+  line-height: 14px;
+  color: var(--color-gray);
+}
+
+.footer__socials {
+  display: flex;
+  gap: 15px;
+  margin-top: 14px;
+}
+
+.footer__social {
+  display: block;
+  border-radius: 50%;
+  transition: box-shadow 0.2s;
+}
+
+.footer__social:hover {
+  box-shadow: 0 0 10px var(--color-red-glow);
+}
+
+/* ===================================================================
+   Страница «Меню»
+   =================================================================== */
+.menu {
+  padding-top: 26px;
+  padding-bottom: 47px;
+}
+
+/* Вкладки «Основное меню» / «Барная карта» */
+.menu__tabs {
+  display: flex;
+  gap: 52px;
+}
+
+.menu__tab {
+  font-family: var(--font-main);
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--color-gray-muted);
+  transition: color 0.2s;
+}
+
+.menu__tab:hover {
+  color: var(--color-red);
+}
+
+.menu__tab--active,
+.menu__tab--active:hover {
+  color: var(--color-white);
+}
+
+/* Категории и поиск */
+.menu__controls {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin-top: 31px;
+}
+
+/* два ряда категорий — одна сетка колонок: пункты верхнего и нижнего ряда стоят ровно друг под другом */
+.categories {
+  line-height: 22px;
+  display: grid;
+  grid-template-columns: 162px 138px 142px 76px 56px 150px;
+  justify-content: space-between;
+  justify-items: start;
+  width: 884px;
+}
+
+.categories__link {
+  font-family: var(--font-main);
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  transition: color 0.2s;
+}
+
+.categories__link:hover {
+  color: var(--aqua);
+}
+
+/* Бар: три категории в один ряд, слева направо (не растягиваем по ширине 884px) */
+.categories--bar {
+  justify-content: flex-start;
+  gap: 56px;
+}
+
+/* Поле поиска 271×50 справа */
+.search {
+  position: absolute;
+  top: 5px;
+  right: 0;
+  display: flex;
+  width: 271px;
+  height: 50px;
+}
+
+.search__input {
+  flex-grow: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 14px 0 20px;
+  /* поле темнее и плотнее волнистого фона + заметная, но мягкая аквамариновая рамка */
+  border: 1px solid rgba(127, 227, 209, 0.55);
+  border-right: none;
+  border-radius: var(--radius) 0 0 var(--radius);
+  background-color: #0a3440;
+  color: var(--color-white);
+  font-size: 16px;
+  line-height: 20px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search__input::placeholder {
+  color: #b5d6d3;                 /* контраст к фону поля ≈ 9:1 */
+  opacity: 1;
+}
+
+/* Фокус (мышь и клавиатура): аквамариновая рамка и мягкое свечение внутри поля, за его края не выходит */
+.search__input:focus {
+  border-color: var(--aqua);
+  box-shadow: inset 0 0 0 1px var(--aqua), inset 0 0 12px rgba(63, 217, 192, 0.22);
+}
+
+.search__input:focus-visible {
+  outline: none;                  /* рамку фокуса рисует box-shadow выше */
+}
+
+.search__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border: 1px solid rgba(127, 227, 209, 0.55);   /* та же рамка, что у поля: единая форма */
+  border-left: none;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background-color: var(--color-red);
+  box-shadow: var(--glow-red);
+  transition: background-color 0.2s;
+}
+
+.search__btn:hover {
+  background-color: #096b5f;
+}
+
+/* Кнопка «Фильтры» и «таблетки» */
+.filters {
+  position: relative;             /* от неё позиционируется панель фильтров */
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-top: 34px;
+}
+
+.filters__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 17px;
+  width: 155px;
+  height: 50px;
+  border-radius: var(--radius);
+  background-color: var(--color-red);
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 600;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.filters__btn:hover {
+  background-color: #096b5f;
+}
+
+.filters__tags {
+  display: flex;
+  gap: 20px;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px 0 14px;
+  border: 1px solid rgba(127, 227, 209, 0.5);
+  border-radius: 100px;
+  font-size: 16px;
+  line-height: 19px;
+  text-transform: uppercase;
+  cursor: default;           /* сама «таблетка» не кликается, кликается только крестик */
+  transition: background-color 0.2s;
+}
+
+.tag:hover {
+  background-color: rgba(63, 217, 192, 0.15);
+}
+
+.tag--green {
+  border-color: var(--color-green);
+}
+
+.tag--green:hover {
+  background-color: rgba(109, 171, 88, 0.15);
+}
+
+/* ===== Карточки блюд: сетка 3 колонки по 380px ===== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 380px);
+  justify-content: space-between;
+  row-gap: 25px;                  /* = промежуток между колонками (1190 − 3 × 380) / 2 */
+  margin-top: 43px;
+}
+
+/* Карточка: фото 4:3 сверху, ниже название → ккал/БЖУ → нижняя строка (цена + кнопки) прижата к низу,
+   поэтому в ряду нижние строки всех карточек на одной линии */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+}
+
+.card__photo {
+  position: relative;
+  flex-shrink: 0;
+  height: 285px;                  /* 380 × 285 = 4:3 у всех карточек меню и бара */
+  overflow: hidden;
+}
+
+.card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.card:hover .card__img {
+  transform: scale(1.04);
+}
+
+/* Три точки фото-слайдера внутри карточки */
+.mini-dots {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  display: flex;
+  gap: 12px;
+  transform: translateX(-50%);
+}
+
+.mini-dots__item {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(5, 36, 48, 0.35);
+}
+
+.mini-dots__item--active {
+  background-color: var(--aqua);
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 18px 22px 22px;
+}
+
+/* Название: место под две строки всегда, текст прижат к верху — ккал/БЖУ у всех карточек на одной высоте */
+.card__title {
+  display: flex;
+  align-items: flex-start;
+  min-height: 50px;
+  font-size: 20px;
+  line-height: 25px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.card__info {
+  display: flex;
+  gap: 24px;
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.card__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.card__buttons {
+  display: flex;
+  gap: 5px;
+}
+
+/* Маленькие кнопки «Подробнее» */
+.btn-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: var(--radius);
+  text-transform: uppercase;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.btn-small--white {
+  width: 114px;
+  background-color: var(--color-white);
+  color: var(--color-red);
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.btn-small--white:hover {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+.btn-small--red {
+  width: 133px;
+  margin-right: 9px;
+  background-color: var(--color-red);
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.btn-small--red:hover {
+  background-color: var(--color-white);
+  color: var(--color-red);
+}
+
+/* Квадратная кнопка с тележкой 40×40 */
+.cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  background-color: var(--color-red);
+  transition: box-shadow 0.2s;
+}
+
+.cart-btn:hover {
+  box-shadow: var(--glow-red);
+}
+
+/* Подсказка «?» и белое облачко с текстом */
+.tooltip {
+  position: absolute;
+  top: 300px;                     /* значок — справа от названия (фото 285px), облачко — над ним, внутри карточки */
+  right: 14px;
+  z-index: 3;
+  width: 53px;
+  height: 53px;
+}
+
+.tooltip__btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--card-border-hover);
+  cursor: help;
+}
+
+.tooltip__text {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 10px);
+  width: 259px;
+  padding: 12px 14px;
+  border-radius: 15px;
+  background-color: var(--color-white);
+  color: #24525c;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s;
+}
+
+/* показываем облачко при наведении на «?» */
+.tooltip__btn:hover + .tooltip__text,
+.tooltip__btn:focus-visible + .tooltip__text,
+.tooltip--open .tooltip__text {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== Раскрытая карточка блюда (1190×550) ===== */
+.dish {
+  position: relative;
+  grid-column: 1 / -1;            /* в общей сетке карточек занимает весь ряд */
+  height: 550px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+}
+
+.dish__photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 440px;
+  height: 550px;
+  overflow: hidden;
+  border-radius: var(--radius-card) 0 0 var(--radius-card);
+}
+
+.dish__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dish__photo .mini-dots {
+  bottom: 18px;
+}
+
+/* Значок «Видео: как есть блюдо?» */
+.video-badge {
+  position: absolute;
+  top: 4px;
+  left: 89px;
+  z-index: 2;
+  width: 134px;
+  height: 66px;
+}
+
+.video-badge__label {
+  position: absolute;
+  top: 11px;
+  left: 44px;
+  width: 90px;
+  height: 44px;
+  padding: 4px 0 0 26px;
+  border-radius: 6.8px;
+  background-color: var(--color-red);
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+}
+
+.video-badge__big {
+  font-size: 14.7px;
+}
+
+.video-badge__mid {
+  font-size: 10.6px;
+}
+
+.video-badge__circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background-color: var(--color-white);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.46), 0 0 10px var(--color-white);
+}
+
+/* Треугольник «Play» рисуем через clip-path */
+.video-badge__circle::before {
+  content: "";
+  position: absolute;
+  top: 17px;
+  left: 20px;
+  width: 27px;
+  height: 31px;
+  background-color: var(--color-red);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.video-badge:hover .video-badge__label {
+  background-color: #096b5f;
+}
+
+/* Круглый крестик «закрыть» */
+.dish__close {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--color-red);
+  box-shadow: var(--glow-red);
+  transition: transform 0.2s;
+}
+
+.dish__close :is(img, svg, .ph) {
+  width: 14px;
+  height: 14px;
+}
+
+.dish__close:hover {
+  transform: rotate(90deg);
+}
+
+.dish__content {
+  position: absolute;
+  top: 52px;
+  left: 467px;
+  width: 618px;
+}
+
+.dish__title {
+  font-size: 30px;
+  line-height: 35px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.dish__info {
+  display: flex;
+  gap: 32px;
+  margin-top: 16px;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.dish__text {
+  max-width: 560px;
+  margin-top: 24px;
+  font-size: 18px;
+  line-height: 26px;
+
+  /* тема «Аквамарин» */
+  color: var(--card-muted);
+}
+
+/* Нижняя строка раскрытой карточки: цена — счётчик — кнопка, все по одной оси (центр на 410px),
+   левый край цены совпадает с текстом выше */
+.dish__price {
+  position: absolute;
+  top: 380px;
+  left: 467px;
+  height: 60px;
+  color: var(--aqua);
+  font-size: 40px;
+  line-height: 60px;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dish__price small {
+  color: var(--card-muted);
+  font-size: 18px;
+  font-weight: 400;
+}
+
+/* Счётчик количества «- 1 +» (только внешний вид) */
+.counter {
+  position: absolute;
+  top: 369px;
+  left: 695px;
+  display: flex;
+  width: 87px;
+  height: 29px;
+  border-radius: 5.8px;
+  background-color: var(--color-white);
+  overflow: hidden;
+}
+
+.counter__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 100%;
+  background-color: var(--color-red);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.counter__btn:hover {
+  background-color: #096b5f;
+}
+
+.counter__value {
+  flex-grow: 1;
+  color: #818181;
+  font-size: 16.24px;
+  line-height: 29px;
+  text-align: center;
+}
+
+/* Кнопка «Добавить в корзину» 297×60 */
+.btn-cart {
+  position: absolute;
+  top: 380px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 297px;
+  height: 60px;
+  padding-left: 16px;
+  border-radius: var(--radius);
+  background-color: var(--color-red);
+  color: var(--color-white);      /* на светлой карточке текст наследовал тёмный цвет и сливался с кнопкой */
+  font-size: 18px;
+  line-height: 21px;
+  text-transform: uppercase;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.btn-cart:hover {
+  background-color: #096b5f;
+  box-shadow: var(--glow-red);
+}
+
+/* Метки блюда внизу */
+.dish__tags {
+  position: absolute;
+  top: 476px;
+  left: 467px;
+  display: flex;
+  gap: 32px;
+  font-size: 14px;
+  line-height: 16px;
+  text-transform: uppercase;
+  color: var(--card-accent);
+}
+
+.dish__tag--green {
+  color: #9bd77f;                 /* светлее --color-green: читается на тёмной карточке */
+}
+
+/* Кнопка «Показать еще» по центру */
+.btn-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 194px;
+  height: 47px;
+  margin: 59px auto 0;
+  border-radius: 100px;
+  background-color: var(--color-red);
+  box-shadow: var(--glow-red);
+  font-size: 16px;
+  line-height: 19px;
+  text-transform: uppercase;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.btn-more:hover {
+  background-color: #096b5f;
+  box-shadow: 0 0 25px var(--color-red);
+}
+
+/* ===================================================================
+   Простая адаптация: на экранах уже 1240px страница прокручивается
+   по горизонтали (макет только десктопный, задан min-width у body)
+   =================================================================== */
+
+/* ===================================================================
+   3а. Шапка: выпадающее меню «Еще...» и кнопка корзины
+   =================================================================== */
+.nav__more {
+  position: relative;
+}
+
+.nav__toggle {
+  cursor: pointer;
+}
+
+.nav__toggle[aria-expanded="true"] {
+  color: var(--color-red);
+}
+
+/* Список остальных страниц под пунктом «Еще...» */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 18px);
+  left: 50%;
+  z-index: 20;
+  width: 250px;
+  padding: 12px 0;
+  border-radius: 15px;
+  background-color: var(--color-bg-dark);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(63, 217, 192, 0.35);
+  transform: translateX(-50%);
+}
+
+.dropdown__link {
+  display: block;
+  padding: 9px 22px;
+  font-size: 16px;
+  line-height: 19px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.dropdown__link:hover,
+.dropdown__link:focus-visible {
+  color: var(--color-red);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Белая кнопка корзины с красной тележкой (из шапки страницы заказа) */
+.icon-btn--white {
+  background-color: var(--color-white);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.26);
+}
+
+.icon-btn--white:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+/* Красный кружок с числом товаров */
+.header__cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: 11px;
+  background-color: var(--color-red);
+  box-shadow: 0 0 8px var(--color-red-glow);
+  font-size: 12px;
+  line-height: 22px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+/* На странице заказа кружок не показываем, пока корзина пуста (как в макете) */
+.header__cart-count:empty {
+  display: none;
+}
+
+/* Кнопка мигает, когда в корзину что-то добавили */
+.header__cart--bump {
+  animation: cart-bump 0.4s ease;
+}
+
+@keyframes cart-bump {
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* ===== Кнопки-«ссылки» (раньше были <a>): общий сброс ===== */
+.about__arrow,
+.promo__arrow,
+.lines__item,
+.dots__item,
+.mini-dots__item,
+.categories__link,
+.dish__close,
+.video-badge,
+.about__more,
+.tag__remove {
+  cursor: pointer;
+}
+
+.lines li {
+  display: flex;
+}
+
+.lines__item:not(.lines__item--active):hover {
+  background-color: #9a9a9a;
+}
+
+.mini-dots li {
+  display: flex;
+}
+
+.mini-dots__item:not(.mini-dots__item--active):hover {
+  background-color: #6a6a6a;
+}
+
+/* выбранная категория: светлый аквамарин со свечением (тёмно-бирюзовый сливался с фоном) */
+.categories__link--active {
+  color: var(--aqua);
+  text-shadow: 0 0 12px rgba(63, 217, 192, 0.55);
+}
+
+/* Крестик внутри «таблетки» фильтра */
+.tag__remove {
+  display: flex;
+  padding: 2px;
+  margin-right: -2px;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.tag__remove:hover {
+  transform: rotate(90deg) scale(1.2);
+}
+
+/* «Читать больше» на главной */
+.about__extra {
+  margin-top: 24px;
+  color: var(--color-gray);
+  font-size: 18px;
+  line-height: 23px;
+}
+
+.is-fading {
+  opacity: 0.2;
+}
+
+/* Скрытые фильтром карточки */
+.card[hidden],
+.drink[hidden] {
+  display: none;
+}
+
+/* ===== Панель фильтров (кнопка «Фильтры») ===== */
+.filters__btn[aria-expanded="true"] {
+  background-color: #096b5f;
+}
+
+.filters-panel {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 300px;
+  padding: 22px 24px;
+  border-radius: 15px;
+  background-color: var(--color-bg-dark);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(63, 217, 192, 0.4);
+}
+
+.filters-panel__option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  line-height: 19px;
+  cursor: pointer;
+}
+
+.filters-panel__check {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-red);
+  cursor: pointer;
+}
+
+.filters-panel__reset {
+  align-self: flex-start;
+  margin-top: 4px;
+  color: var(--color-gray-light);
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.filters-panel__reset:hover {
+  color: var(--color-white);
+}
+
+/* Сообщение «Ничего не нашлось» */
+.menu__empty {
+  margin-top: 40px;
+  color: var(--color-gray-light);
+  font-size: 20px;
+  text-align: center;
+}
+
+.menu__reset {
+  color: var(--color-red);
+  text-decoration: underline;
+}
+
+/* Подсветка найденного текста в названии */
+.card__title mark,
+.drink__title mark {
+  background: none;
+
+  /* тема «Аквамарин» */
+  color: var(--card-accent);
+}
+
+/* ===================================================================
+   6а. Барная карта: карточки коктейлей (380×189 и с фото 380×617)
+   =================================================================== */
+.menu--bar {
+  padding-top: 27px;
+  padding-bottom: 73px;
+}
+
+.menu--bar .menu__controls {
+  margin-top: 32px;
+}
+
+.menu--bar .filters {
+  margin-top: 34px;
+}
+
+.cards--bar {
+  margin-top: 39px;
+}
+
+/* Карточка напитка: как карточка меню (фото 4:3 у карточек с фото), нижняя строка прижата к низу */
+.drink {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+}
+
+.drink__photo {
+  flex-shrink: 0;
+  height: 285px;
+  overflow: hidden;
+}
+
+.drink__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 0;         /* бутылки и бокалы не срезаются сверху */
+  transition: transform 0.4s;
+}
+
+.drink:hover .drink__img {
+  transform: scale(1.04);
+}
+
+.drink__body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 18px 22px 22px;
+}
+
+.drink__title {
+  font-size: 20px;
+  line-height: 25px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.drink__desc {
+  min-height: 38px;               /* место под две строки: нижние строки карточек ряда на одной линии */
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 19px;
+}
+
+.drink__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+/* ===================================================================
+   7. Общие блоки внутренних страниц
+   =================================================================== */
+
+/* Красная полоска + большой заголовок страницы */
+.page-head {
+  padding-top: 20px;
+}
+
+.page-head__title {
+  margin-top: 15px;
+  font-size: 40px;
+  line-height: 47px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.32);
+}
+
+.page-head--photos {
+  padding-top: 26px;
+}
+
+.page-head--photos .page-head__title {
+  font-weight: 500;
+}
+
+.page-head--crud {
+  padding-top: 14px;
+}
+
+/* ===== Всплывающие окна (общая часть) ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.modal__overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+  animation: fade-in 0.2s ease;
+}
+
+.modal__window {
+  position: relative;
+  margin: auto;
+  border-radius: 15px;
+  background: var(--color-bg);
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
+  animation: pop-in 0.25s ease;
+}
+
+.modal__close {
+  position: absolute;
+  top: 18px;
+  right: 25px;
+  z-index: 2;
+  display: flex;
+  padding: 6px;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.modal__close:hover {
+  transform: rotate(90deg);
+}
+
+.modal__title {
+  font-size: 25px;
+  line-height: 29px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Пока окно открыто, страница под ним не прокручивается */
+.is-modal-open {
+  overflow: hidden;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+}
+
+/* ===== Поля форм ===== */
+/* Поле в рамке (окно доставки, профиль) */
+.field {
+  display: block;
+  width: 100%;
+  height: 50px;
+  padding: 0 20px;
+  border: 1px solid var(--color-red-glow);
+  border-radius: var(--radius);
+  background-color: var(--color-bg);
+  font-size: 16px;
+  line-height: 19px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field::placeholder {
+  color: var(--color-gray-light);
+}
+
+.field:focus {
+  border-color: var(--color-white);
+}
+
+textarea.field {
+  font: inherit;
+  font-size: 16px;
+  color: inherit;
+  resize: vertical;
+}
+
+.field--area {
+  height: 83px;
+  padding-top: 14px;
+}
+
+/* Поле-линия (форма бронирования) */
+.line-field {
+  display: block;
+}
+
+.line-field__input {
+  width: 100%;
+  height: 34px;
+  padding: 0 6px;
+  border-bottom: 2px solid var(--color-red);
+  box-shadow: 0 8px 12px -10px var(--color-red-glow);
+  font-size: 16px;
+  outline: none;
+  color-scheme: dark;
+}
+
+.line-field__input::placeholder {
+  color: #666666;
+}
+
+.line-field__input:focus {
+  border-color: var(--color-white);
+}
+
+/* Ошибка в поле после проверки */
+.is-invalid,
+.field.is-invalid,
+.line-field__input.is-invalid {
+  border-color: #ff6b78;
+  box-shadow: 0 0 10px rgba(255, 107, 120, 0.6);
+}
+
+.form__error {
+  color: #ff6b78;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.form__note {
+  color: #636363;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+}
+
+/* Сообщение об успешной отправке (подставляет script.js вместо формы) */
+.form-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 30px 10px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 26px;
+  animation: pop-in 0.3s ease;
+}
+
+.form-success::before {
+  content: "";
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: url("data:image/svg+xml,%3Csvg width=%2215%22 height=%2212%22 viewBox=%220 0 15 12%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath d=%22M1.5 6.2L5.4 10L13.5 1.8%22 stroke=%22%230b7a6c%22 stroke-width=%222.4%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E %3C/svg%3E") center / 30px no-repeat, var(--color-white);
+  box-shadow: 0 0 25px var(--color-red);
+}
+
+.form-success__again {
+  color: var(--color-gray-light);
+  font-size: 15px;
+  text-decoration: underline;
+}
+
+.form-success__again:hover {
+  color: var(--color-white);
+}
+
+/* Радиокнопки (способ оплаты) */
+.pay {
+  border: none;
+}
+
+.pay__title {
+  margin-bottom: 16px;
+  font-size: 21px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.radio {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 14px;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.radio:first-of-type {
+  margin-top: 0;
+}
+
+/* настоящие radio/checkbox прячем, рисуем свои кружок/квадрат */
+.radio__input,
+.check__input {
+  position: absolute;
+  opacity: 0;
+}
+
+.radio__mark {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  border: 0.9px solid #d2d2d2;
+  border-radius: 50%;
+  background-color: #f9f9f9;
+  transition: background-color 0.2s;
+}
+
+.radio__input:checked + .radio__mark {
+  border-color: #0b7a6c;
+  background: radial-gradient(circle, var(--color-white) 3.5px, #0b7a6c 4px);
+}
+
+.radio__input:focus-visible + .radio__mark {
+  outline: 2px solid var(--color-white);
+  outline-offset: 2px;
+}
+
+/* Галочка-квадрат («подать к столу») */
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+}
+
+.check__box {
+  flex-shrink: 0;
+  width: 25px;
+  height: 25px;
+  border-radius: 4.66px;
+  background-color: var(--color-white);
+}
+
+.check__input:checked + .check__box {
+  background: url("data:image/svg+xml,%3Csvg width=%2215%22 height=%2212%22 viewBox=%220 0 15 12%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath d=%22M1.5 6.2L5.4 10L13.5 1.8%22 stroke=%22%230b7a6c%22 stroke-width=%222.4%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E %3C/svg%3E") center / 15px 12px no-repeat, var(--color-white);
+}
+
+.check__input:focus-visible + .check__box {
+  outline: 2px solid var(--color-red);
+  outline-offset: 2px;
+}
+
+/* ===== Короткие сообщения внизу экрана ===== */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  z-index: 200;
+  max-width: 520px;
+  padding: 16px 26px;
+  border-radius: 10px;
+  background-color: var(--color-red);
+  box-shadow: 0 0 25px rgba(63, 217, 192, 0.7);
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  transform: translateX(-50%);
+  animation: toast-in 0.25s ease;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+}
+
+/* ===== Окно бронирования: план зала + форма ===== */
+.modal--booking .modal__window {
+  width: 1000px;
+  padding: 36px 40px 40px;
+}
+
+.booking {
+  display: flex;
+  gap: 40px;
+  margin-top: 28px;
+}
+
+.plan {
+  position: relative;
+  flex-shrink: 0;
+  width: 480px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.plan__img {
+  width: 100%;
+  height: auto;
+}
+
+/* Прозрачная кнопка поверх стола на картинке */
+.plan__table {
+  position: absolute;
+  border-radius: 8%;
+  cursor: pointer;
+  transition: box-shadow 0.2s, background-color 0.2s;
+
+  /* тема «Аквамарин» */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background-color: var(--color-red);
+  color: var(--color-white);
+  font: 700 12px/1 var(--font-main);
+}
+
+.plan__table--round {
+  border-radius: 50%;
+}
+
+.plan__table:hover,
+.plan__table:focus-visible {
+  background-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 14px var(--color-red);
+}
+
+.plan__table--selected,
+.plan__table--selected:hover {
+  outline: 3px solid var(--color-white);
+  outline-offset: 2px;
+  box-shadow: 0 0 18px var(--color-white);
+}
+
+.plan__table--busy {
+  cursor: not-allowed;
+}
+
+.plan__table--busy:hover {
+  box-shadow: none;
+}
+
+.booking__form {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  flex-grow: 1;
+  padding-top: 6px;
+}
+
+.booking__hint {
+  color: var(--color-gray-light);
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.booking__table {
+  font-size: 22px;
+  line-height: 26px;
+}
+
+.booking__table b {
+  color: var(--color-red);
+}
+
+.booking__submit {
+  width: 100%;
+}
+
+/* ===== Окно акции ===== */
+.promo-modal {
+  display: flex;
+  gap: 36px;
+  width: 760px;
+  padding: 40px;
+}
+
+.promo-modal__img {
+  flex-shrink: 0;
+  border-radius: 30px;
+  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.35);
+}
+
+.promo-modal__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+  padding-top: 14px;
+}
+
+.promo-modal__title {
+  text-align: left;
+}
+
+.promo-modal__text {
+  color: #e5e5e5;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+/* ===== Просмотр фото (лайтбокс) ===== */
+.lightbox {
+  position: relative;
+  margin: auto;
+  animation: pop-in 0.25s ease;
+}
+
+/* Внутренний figure (фото + счётчик) — только для смысла, на раскладку не влияет:
+   display: contents «растворяет» обёртку, всё стоит как раньше */
+.lightbox__figure {
+  display: contents;
+}
+
+.lightbox__img {
+  max-width: 1100px;
+  max-height: calc(100vh - 120px);
+  border-radius: 8px;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+}
+
+.lightbox__counter {
+  margin-top: 14px;
+  color: var(--color-gray-light);
+  font-size: 16px;
+  text-align: center;
+}
+
+.lightbox__arrow {
+  position: absolute;
+  top: calc(50% - 40px);
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.lightbox__arrow--prev {
+  left: -70px;
+}
+
+.lightbox__arrow--next {
+  right: -70px;
+}
+
+.lightbox__arrow :is(img, svg, .ph) {
+  filter: brightness(0) invert(1);
+}
+
+.lightbox__arrow:hover {
+  transform: scale(1.15);
+}
+
+.lightbox__arrow:hover svg {
+  filter: none;
+}
+
+.lightbox__close {
+  top: -44px;
+  right: -8px;
+}
+
+/* ===================================================================
+   8. Корзина (cart.html) и окно «Заполните данные для доставки»
+   =================================================================== */
+.cart {
+  padding-bottom: 88px;
+}
+
+/* Строка: поиск — «В корзине N товаров» — «Очистить корзину» */
+.cart__toolbar {
+  position: relative;
+  height: 50px;
+  margin-top: 44px;
+}
+
+.search--cart {
+  top: 0;
+  left: 2px;
+  right: auto;
+}
+
+.search--cart .search__input {
+  padding-left: 23px;
+}
+
+.cart__count {
+  position: absolute;
+  top: 16px;
+  left: 729px;
+  font-size: 19.45px;
+  line-height: 23px;
+}
+
+.cart__count b {
+  color: var(--color-red);
+  font-weight: 400;
+}
+
+/* красная линия под счётчиком */
+.cart__count::after {
+  content: "";
+  position: absolute;
+  top: 30px;
+  left: 5px;
+  width: 182px;
+  height: 2px;
+  background-color: var(--color-red);
+}
+
+.cart__clear {
+  position: absolute;
+  top: 0;
+  right: -1px;
+  gap: 11px;
+  width: 222px;
+  height: 50px;
+  padding-right: 4px;
+  box-shadow: var(--glow-red);
+  font-size: 15px;
+  line-height: 17px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+.cart__body {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 89px;
+}
+
+.cart__list {
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+  width: 767px;
+}
+
+.cart__empty {
+  width: 767px;
+  padding: 50px 0;
+  color: var(--color-gray-light);
+  font-size: 22px;
+  text-align: center;
+}
+
+.cart__empty .link-arrow {
+  margin-left: 16px;
+  color: var(--color-white);
+}
+
+/* Строка товара 767×151 */
+.cart-item {
+  position: relative;
+  display: flex;
+  height: 151px;
+  border-radius: 30px;
+  background: var(--color-bg-dark);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  animation: fade-in 0.3s ease;
+}
+
+.cart-item__img {
+  flex-shrink: 0;
+  width: 226px;
+  height: 151px;
+  border-radius: 30px 0 0 30px;
+  object-fit: cover;
+}
+
+.cart-item__body {
+  position: relative;
+  flex-grow: 1;
+  padding: 22px 0 0 43px;
+}
+
+.cart-item__title {
+  max-width: 440px;
+  font-size: 22px;
+  line-height: 25px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-item__info,
+.order-item__info {
+  display: flex;
+  gap: 32px;
+  margin-top: 14px;
+  color: var(--color-red);
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.cart-item__price,
+.cart-item__info + .cart-item__price {
+  margin-top: 14px;
+}
+
+/* Маленький счётчик 75×25 (корзина, заказ) */
+.counter--small {
+  top: 103px;
+  left: 234px;
+  width: 75px;
+  height: 25px;
+  border-radius: var(--radius);
+}
+
+.counter--small .counter__btn {
+  width: 18px;
+  height: 25px;
+  border-radius: 0;
+  background-color: var(--color-red);
+  color: var(--color-white);
+  font-size: 14px;
+  line-height: 25px;
+}
+
+.counter--small .counter__btn--minus {
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.counter--small .counter__btn--plus {
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.counter--small .counter__value {
+  width: auto;
+  flex-grow: 1;
+  color: #818181;
+  font-size: 14px;
+  line-height: 25px;              /* по высоте счётчика: цифра по центру, а не прижата к верху */
+}
+
+.cart-item__more {
+  position: absolute;
+  top: 95px;
+  left: 356px;
+}
+
+/* Красный кружок с крестиком «убрать» */
+.cart-item__remove {
+  position: absolute;
+  top: 22px;
+  left: 498px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  background-color: var(--color-red);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cart-item__remove:hover {
+  transform: rotate(90deg);
+  box-shadow: 0 0 12px var(--color-red);
+}
+
+/* «Ваш заказ» 377×507 */
+.summary {
+  flex-shrink: 0;
+  width: 377px;
+  padding: 22px 20px 29px;
+  border-radius: 30px;
+  background: var(--color-bg-dark);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+.summary__title {
+  font-size: 22px;
+  line-height: 25px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.summary__list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-height: 23px;
+  margin-top: 21px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+}
+
+.summary__line {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.summary__name {
+  width: 206px;
+  padding-right: 47px;
+}
+
+.summary__qty {
+  color: #767676;
+}
+
+.summary__price {
+  margin-left: auto;
+  color: var(--color-red);
+  font-size: 20px;
+  line-height: 23px;
+  white-space: nowrap;
+}
+
+.summary__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.summary__row b {
+  color: var(--color-red);
+  font-size: 20px;
+  line-height: 23px;
+  font-weight: 400;
+}
+
+.summary__row--delivery {
+  height: 58px;
+  padding-top: 1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+}
+
+.summary__row--promo {
+  margin-top: 17px;
+}
+
+.summary__discount--off {
+  visibility: hidden;
+}
+
+.summary__promo-msg {
+  margin-top: 6px;
+  color: var(--color-gray-light);
+  font-size: 13px;
+  line-height: 15px;
+}
+
+/* поле промокода 195×34 со стрелкой */
+.promo-code {
+  display: flex;
+  width: 195px;
+  height: 34px;
+}
+
+.promo-code__input {
+  flex-grow: 1;
+  min-width: 0;
+  padding: 0 10px 0 15px;
+  border: 0.7px solid var(--color-gray-light);
+  border-right: none;
+  border-radius: 3.4px 0 0 3.4px;
+  background-color: var(--color-bg);
+  font-size: 11px;
+  outline: none;
+}
+
+.promo-code__input::placeholder {
+  color: var(--color-gray-light);
+}
+
+.promo-code__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  border-radius: 0 3.4px 3.4px 0;
+  background-color: var(--color-red);
+  box-shadow: 0 0 10px var(--color-red);
+  transition: background-color 0.2s;
+}
+
+.promo-code__btn:hover {
+  background-color: #096b5f;
+}
+
+.summary__total {
+  display: flex;
+  align-items: center;
+  margin-top: 21px;
+  font-size: 30px;
+  line-height: 35px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.summary__total span {
+  margin-right: auto;
+}
+
+.summary__old {
+  margin: 4px 10px 0 0;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 400;
+}
+
+.summary__total b {
+  margin-top: 2px;
+  color: var(--color-red);
+  font-size: 20px;
+  line-height: 23px;
+  font-weight: 400;
+}
+
+.summary__btn {
+  width: 100%;
+  height: 50px;
+  margin-top: 29px;
+  box-shadow: var(--glow-red);
+  font-size: 15px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+/* ===== «Добавить к заказу»: карточки соусов 276×73 ===== */
+.addons {
+  position: relative;
+  margin-top: 69px;
+}
+
+.addons__title {
+  font-size: 40px;
+  line-height: 47px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  word-spacing: 6px;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.32);
+}
+
+.addons__list {
+  display: flex;
+  gap: 24.6px;
+  margin-top: 43px;
+}
+
+.addon {
+  position: relative;
+  display: flex;
+  width: 276px;
+  height: 73px;
+  letter-spacing: 0;
+}
+
+.addon__img {
+  width: 101px;
+  height: 73px;
+  border-radius: 13.2px 0 0 13.2px;
+  object-fit: cover;
+}
+
+.addon__body {
+  flex-grow: 1;
+  padding: 9px 0 0 13px;
+  border-radius: 0 13.2px 13.2px 0;
+  background-color: var(--color-white);
+  color: #000000;
+}
+
+.addon--red .addon__body {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+.addon__title {
+  height: 36px;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.addon__price {
+  margin-top: 2px;
+  color: var(--color-red);
+  font-size: 14.3px;
+  line-height: 17px;
+  font-weight: 700;
+}
+
+.addon--red .addon__price {
+  color: var(--color-white);
+}
+
+.addon__price small {
+  font-size: 8.9px;
+  font-weight: 400;
+}
+
+/* белый кружок «+» на углу карточки */
+.addon__add {
+  position: absolute;
+  top: -12px;
+  left: 251px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  background-color: var(--color-white);
+  box-shadow: 0 0 27px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.addon__add:hover {
+  transform: scale(1.12);
+  box-shadow: 0 0 15px var(--color-red);
+}
+
+.addon__add--done {
+  background-color: var(--color-red);
+}
+
+.addon__add--done :is(img, svg, .ph) {
+  filter: brightness(0) invert(1);
+}
+
+/* ===== Окно «Заполните данные для доставки» 684×743 ===== */
+.checkout {
+  width: 684px;
+  padding: 49px 77px 28px 77px;
+  background-position: -16px -178px;
+}
+
+.checkout .modal__close {
+  top: 12px;
+  right: 19px;
+}
+
+.checkout__title {
+  margin: 0 -57px;
+  font-size: 25px;
+  line-height: 29px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.checkout__form {
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
+  margin-top: 40px;
+}
+
+.checkout__form .pay {
+  margin-top: 4px;
+}
+
+.checkout__submit {
+  align-self: center;
+  width: 275px;
+  height: 50px;
+  margin-top: 13px;
+  border-width: 2.9px;
+  font-size: 20px;
+  line-height: 23px;
+  font-weight: 400;
+}
+
+.checkout__note {
+  margin: -1px auto 0;
+  max-width: 381px;
+  color: #636363;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.checkout__sum {
+  font-size: 20px;
+}
+
+.checkout__sum b {
+  color: var(--color-red);
+}
+
+.checkout--pay,
+.checkout--profile {
+  padding-bottom: 44px;
+}
+
+/* ===================================================================
+   9. Заказ (order.html)
+   =================================================================== */
+.order {
+  padding-bottom: 60px;
+}
+
+.page-head--order {
+  position: relative;
+}
+
+.page-head--order .page-head__title {
+  font-weight: 500;
+}
+
+.order__time {
+  margin-left: 28px;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 30px;
+  line-height: 35px;
+  font-weight: 400;
+  text-shadow: none;
+  vertical-align: 3px;
+}
+
+.order__status {
+  position: absolute;
+  top: 41px;
+  right: 0;
+  font-size: 38.15px;
+  line-height: 45px;
+  text-transform: uppercase;
+}
+
+.order__body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 62px;
+}
+
+.order__list {
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+  width: 806px;
+  margin-top: 9px;
+}
+
+.order-item {
+  position: relative;
+  display: flex;
+  height: 141px;
+  border-radius: 28px;
+  background: var(--color-bg-dark);
+  box-shadow: 0 0 28px rgba(0, 0, 0, 0.2);
+}
+
+.order-item__img {
+  flex-shrink: 0;
+  width: 210px;
+  height: 141px;
+  border-radius: 23px 0 0 23px;
+  object-fit: cover;
+}
+
+.order-item__body {
+  position: relative;
+  flex-grow: 1;
+  padding: 20px 0 0 40px;
+}
+
+.order-item__title {
+  font-size: 20.5px;
+  line-height: 24px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.order-item__info {
+  gap: 30px;
+  margin-top: 13px;
+  font-size: 14.9px;
+  line-height: 17px;
+}
+
+.order-item__price {
+  margin-top: 13px;
+  font-size: 33.5px;
+  line-height: 39px;
+}
+
+.order-item__price small {
+  font-size: 14.9px;
+}
+
+.order-item .counter--small {
+  top: 94px;
+  left: 199px;
+}
+
+.order-item__serve {
+  position: absolute;
+  top: 94px;
+  left: 339px;
+  font-size: 12px;
+  line-height: 14px;
+  text-transform: uppercase;
+}
+
+/* таймер «17 минут» */
+.order-item__timer {
+  position: absolute;
+  top: 92px;
+  left: 488px;
+  width: 31px;
+  height: 25px;
+  padding: 10px 0 0 11px;
+  background: url("data:image/svg+xml,%3Csvg width=%2231%22 height=%2225%22 viewBox=%220 0 31 25%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Ccircle cx=%2216%22 cy=%222%22 r=%222%22 fill=%22white%22/%3E%3Ccircle cx=%2229%22 cy=%2216%22 r=%222%22 fill=%22white%22/%3E%3Ccircle cx=%222%22 cy=%2216%22 r=%222%22 fill=%22white%22/%3E %3Ccircle cx=%2215.5%22 cy=%2215.5%22 r=%229.5%22 fill=%22%230b7a6c%22/%3E %3C/svg%3E") no-repeat;
+  color: #072a33;
+  font-size: 9.9px;
+  line-height: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* кружок статуса на углу карточки */
+.order-item__status {
+  position: absolute;
+  top: -9px;
+  left: 777px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 14px;
+  background-color: var(--color-white);
+}
+
+.order-item__status--cancel {
+  background-color: var(--color-red);
+}
+
+.order__side {
+  width: 351px;
+}
+
+.summary--order {
+  width: 351px;
+  padding: 20px 19px 33px;
+  border-radius: 28px;
+}
+
+.summary__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.summary--order .summary__title {
+  font-size: 20.5px;
+  line-height: 24px;
+}
+
+.summary__table {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 20.5px;
+  line-height: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.summary__table:hover {
+  color: var(--color-red);
+}
+
+.summary--order .summary__list {
+  gap: 14px;
+  margin-top: 39px;
+  padding-bottom: 30px;
+}
+
+.summary--order .summary__line {
+  font-size: 14.9px;
+  line-height: 17px;
+}
+
+.summary--order .summary__name {
+  width: 191px;
+  padding-right: 43px;
+}
+
+.summary--order .summary__price,
+.summary__total--order b {
+  font-size: 18.6px;
+  line-height: 22px;
+}
+
+.summary__total--order {
+  margin-top: 20px;
+  font-size: 27.9px;
+  line-height: 32px;
+}
+
+.summary--order .summary__btn {
+  height: 45px;
+  margin-top: 21px;
+  font-size: 14px;
+}
+
+.order__actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 26px;
+}
+
+.order__btn {
+  width: 170px;
+  height: 41px;
+  border-radius: 4px;
+  background-color: var(--color-red);
+  box-shadow: 0 0 15px rgba(63, 217, 192, 0.5);
+  font-size: 12.8px;
+  line-height: 15px;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.order__btn:hover {
+  background-color: #096b5f;
+  box-shadow: 0 0 20px var(--color-red);
+}
+
+.order__btn--white {
+  background-color: var(--color-white);
+  color: var(--color-red);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.order__btn--white:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.addons--order {
+  margin-top: 71px;
+}
+
+.addons--order .addons__title {
+  font-size: 38.36px;
+  line-height: 45px;
+  font-weight: 500;
+}
+
+.addons--order .addons__list {
+  margin-top: 47px;
+}
+
+/* «Перейти в меню» справа от заголовка */
+.addons__menu {
+  position: absolute;
+  top: 7px;
+  right: 0;
+  width: 249px;
+  height: 50px;
+  box-shadow: var(--glow-red);
+  font-size: 18px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+/* ===== Отзыв ===== */
+.review {
+  margin-top: 78px;
+}
+
+.review__toggle {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  font-size: 38.36px;
+  line-height: 45px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-shadow: 0 0 28px rgba(255, 255, 255, 0.32);
+  cursor: pointer;
+}
+
+.review__toggle :is(img, svg, .ph) {
+  transition: transform 0.25s;
+}
+
+.review__toggle[aria-expanded="true"] :is(img, svg, .ph) {
+  transform: rotate(90deg);
+}
+
+.review__toggle:hover {
+  color: var(--color-red);
+}
+
+.review__form {
+  position: relative;
+  padding-top: 40px;
+  animation: fade-in 0.3s ease;
+}
+
+.review__ratings {
+  display: flex;
+  gap: 60px;
+}
+
+.rating {
+  width: 190px;
+}
+
+.rating__label {
+  display: block;
+  font-size: 24px;
+  line-height: 28px;
+  text-transform: uppercase;
+}
+
+.stars {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.stars__star {
+  display: flex;
+  color: var(--color-white);
+  cursor: pointer;
+  transition: transform 0.15s, color 0.15s;
+}
+
+.stars__star--on {
+  color: #0b7a6c;
+}
+
+.stars__star:hover {
+  transform: scale(1.15);
+}
+
+.field--review {
+  width: 839px;
+  height: 118px;
+  margin-top: 46px;
+  padding: 16px 15px;
+  border: none;
+  border-radius: 15px;
+  background-color: var(--color-bg-dark);
+  font-size: 18px;
+  line-height: 21px;
+}
+
+.field--review::placeholder {
+  color: rgba(255, 255, 255, 0.27);
+}
+
+.review__form .form__error {
+  margin-top: 10px;
+}
+
+.review__submit {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 294px;
+  height: 59px;
+  border-radius: 8.9px;
+  font-size: 21.24px;
+  line-height: 25px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+/* ===================================================================
+   10. Фотоотчёты (photos.html) и фотоотчёт вечера (photo-report.html)
+   =================================================================== */
+.photos,
+.report {
+  position: relative;
+  padding-bottom: 41px;
+}
+
+/* едва заметный узор из иконок на фоне, плавно исчезающий сверху и снизу */
+.photos::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 1961px;
+  background: none;
+  opacity: 0.5;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 10%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 10%, #000 93%, transparent 100%);
+  pointer-events: none;
+}
+
+.photos .container,
+.report .container {
+  position: relative;
+}
+
+.album {
+  margin-top: 44px;
+}
+
+.album + .album {
+  margin-top: 82px;
+}
+
+.album__head {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;      /* подписи альбомов убраны — «Смотреть все фото» остаётся справа */
+  min-height: 28px;               /* высота строки, как была с подписью */
+}
+
+.album__all {
+  margin-right: 0;
+  gap: 21px;
+}
+
+/* сетка альбома: большое фото слева и 2×2 маленьких */
+.album__grid {
+  display: grid;
+  grid-template-columns: 584px 280px 280px;
+  grid-template-rows: 233px 233px;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  row-gap: 15px;
+  margin-top: 25px;
+}
+
+.album__item--big {
+  grid-row: 1 / 3;
+}
+
+.album__link,
+.report__link {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  cursor: zoom-in;
+  transition: box-shadow 0.3s;
+}
+
+.album__link :is(img, svg, .ph),
+.report__link :is(img, svg, .ph) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.album__link:hover,
+.report__link:hover {
+  box-shadow: 0 0 25px rgba(63, 217, 192, 0.7);
+}
+
+.album__link:hover img,
+.report__link:hover img {
+  transform: scale(1.05);
+}
+
+/* Номера страниц 1–7 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 13px;
+  margin-top: 52px;
+}
+
+.pagination__link {
+  width: 26px;
+  height: 26px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 300;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.pagination__link:hover {
+  color: var(--color-red);
+}
+
+.pagination__link--active {
+  border-color: var(--color-red);
+  background-color: var(--color-bg-dark);
+  color: var(--color-red);
+  font-weight: 400;
+}
+
+/* --- фотоотчёт вечера: сетка 4 × 6 --- */
+.report__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 282px);
+  justify-content: space-between;
+  row-gap: 26px;
+  margin-top: 59px;
+}
+
+.report__link {
+  height: 243px;
+  border-radius: 3.9px;
+  box-shadow: 0 0 11.7px rgba(0, 0, 0, 0.5);
+}
+
+/* значок лупы появляется при наведении */
+.report__zoom {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 71px;
+  height: 71px;
+  background: url("data:image/svg+xml,%3Csvg width=%2271%22 height=%2271%22 viewBox=%220 0 71 71%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Ccircle cx=%2227.5%22 cy=%2227.5%22 r=%2224.5%22 stroke=%22%230b7a6c%22 stroke-width=%226%22/%3E %3Cpath d=%22M45 45L65 65M27.5 18.5V36.5M18.5 27.5H36.5%22 stroke=%22%230b7a6c%22 stroke-width=%226%22 stroke-linecap=%22round%22/%3E %3C/svg%3E") center / contain no-repeat;
+  filter: drop-shadow(0 0 15px var(--color-red-glow));
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.report__link:hover .report__zoom,
+.report__link:focus-visible .report__zoom {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.report .pagination {
+  margin-top: 58px;
+}
+
+/* ===================================================================
+   12. Личный кабинет (account.html)
+   =================================================================== */
+.account {
+  padding-bottom: 62px;
+}
+
+.profile {
+  display: flex;
+  gap: 23px;
+  margin-top: 65px;
+}
+
+.profile__avatar {
+  flex-shrink: 0;
+  width: 163px;
+  height: 163px;
+  border: 2px solid var(--aqua);         /* тонкая аквамариновая рамка */
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: 50% 80%;              /* лицо на фото ниже середины — сдвигаем кадр вниз */
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.37);
+}
+
+.profile__name {
+  font-size: 36px;
+  line-height: 42px;
+  font-weight: 700;
+}
+
+.profile__contact {
+  margin-top: 16px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 20px;
+  line-height: 23px;
+}
+
+.profile__edit {
+  margin-top: 24px;
+  font-size: 16px;
+  line-height: 19px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.profile__edit:hover {
+  color: var(--color-red);
+}
+
+.history__title {
+  margin-top: 99px;
+  font-size: 36px;
+  line-height: 43px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.history {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 37px;
+}
+
+.history__card {
+  position: relative;
+  height: 230px;
+  padding: 15px 36px 0 27px;
+  border-radius: 25px;
+  background: var(--color-bg-dark);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  animation: fade-in 0.3s ease;
+}
+
+.history__num {
+  font-size: 22.74px;
+  line-height: 26px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.history__date {
+  margin-left: 13px;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 18.19px;
+  line-height: 21px;
+}
+
+.history__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  width: 645px;
+  margin-top: 22px;
+}
+
+.history__line {
+  display: flex;
+  align-items: center;
+  height: 23px;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.history__name {
+  width: 464px;
+}
+
+.history__qty {
+  color: #767676;
+}
+
+.history__price {
+  margin-left: auto;
+  color: var(--color-red);
+  font-size: 20px;
+  line-height: 23px;
+}
+
+.history__side {
+  position: absolute;
+  top: 63px;
+  left: 951px;
+  width: 203px;
+}
+
+.history__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  line-height: 23px;
+  text-transform: uppercase;
+}
+
+.history__row + .history__row {
+  margin-top: 10px;
+}
+
+.history__row span {
+  color: var(--color-red);
+}
+
+.history__total {
+  text-transform: none;
+}
+
+.history__more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 43px;
+  margin-top: 32px;
+  border-radius: 3.65px;
+  background-color: #0b7a6c;
+  font-size: 18px;
+  line-height: 21px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.history__more:hover {
+  background-color: #096b5f;
+  box-shadow: var(--glow-red);
+}
+
+.btn-more--account {
+  margin-top: 50px;
+}
+
+/* ===================================================================
+   13. CRUD (crud.html): таблица пользователей
+   =================================================================== */
+.crud {
+  padding-bottom: 84px;
+}
+
+.crud__table {
+  width: 100%;
+  margin-top: 39px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: #dcdcdc;
+  text-align: center;
+}
+
+.crud__table th {
+  height: 69px;
+  border-top: 1px solid #24525c;
+  border-bottom: 2px solid #24525c;
+  font-size: 25.7px;
+  line-height: 30px;
+  font-weight: 400;
+}
+
+.crud__table th:nth-child(1) { width: 85px; }
+.crud__table th:nth-child(2) { width: 130px; }
+.crud__table th:nth-child(3) { width: 151px; }
+.crud__table th:nth-child(4) { width: 161px; }
+.crud__table th:nth-child(5) { width: 167px; }
+.crud__table th:nth-child(6) { width: 171px; }
+.crud__table th:nth-child(7) { width: 172px; }
+.crud__table th:nth-child(8) { width: 153px; padding-left: 30px; }
+
+.crud__table td {
+  height: 77px;
+  border-bottom: 1px solid #24525c;
+  font-size: 17px;
+  line-height: 20px;
+}
+
+.crud__row:first-child td {
+  height: 82px;
+}
+
+.crud__row {
+  transition: background-color 0.2s, opacity 0.3s;
+}
+
+.crud__row:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.crud__row--removing {
+  opacity: 0;
+}
+
+.crud__actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.crud__btn {
+  width: 68px;
+  height: 34px;
+  border-radius: 2.9px;
+  font-size: 10px;
+  line-height: 12px;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.crud__btn + .crud__btn {
+  margin-left: 11px;
+}
+
+.crud__btn--edit {
+  background-color: var(--color-white);
+  color: var(--color-bg);
+}
+
+.crud__btn--edit:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+.crud__btn--delete {
+  background-color: #0b7a6c;
+  color: var(--color-white);
+}
+
+.crud__btn--delete:hover {
+  box-shadow: 0 0 10px var(--color-red);
+}
+
+.crud__btn--confirm {
+  background-color: #ff6b78;
+}
+
+/* поле для правки прямо в ячейке */
+.crud__input {
+  width: calc(100% - 8px);
+  height: 34px;
+  padding: 0 6px;
+  border: 1px solid var(--color-red);
+  border-radius: 4px;
+  background-color: var(--color-bg-dark);
+  font-size: 15px;
+  text-align: center;
+  outline: none;
+}
+
+.crud__input:focus {
+  border-color: var(--color-white);
+}
+
+.crud__empty {
+  margin-top: 30px;
+  color: var(--color-gray-light);
+  text-align: center;
+}
+
+/* Фото-слайдер карточки: второй и третий «ракурс» — фото чуть крупнее */
+.js-photo-slider-img {
+  transition: transform 0.4s, object-position 0.4s;
+}
+
+.js-photo-slider-img.is-zoomed,
+.card:hover .js-photo-slider-img.is-zoomed {
+  transform: scale(1.2);
+}
+
+/* ===================================================================
+   Дополнения Аквамарина
+   =================================================================== */
+
+/* План зала в духе Delivery Eat: схема нарисована блоками (полоса 2 этажа, лестница, стойка бара,
+   подписи зон), поверх — кнопки-столы с «стульями»-точками. Цвета и шрифты — «Аквамарина».
+   Расположение повторяет макет плана (координаты в процентах, как у кнопок-столов). */
+.plan__map {
+  position: relative;
+  display: block;
+  aspect-ratio: 1709 / 2113;
+  background: #0d4552;
+}
+
+.plan__floor2 {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 21%;
+  background: #08303a;
+}
+
+.plan__stairs {
+  position: absolute;
+  top: 0;
+  left: 21%;
+  width: 19%;
+  height: 9.5%;
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.2) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 16px);
+}
+
+.plan__label {
+  position: absolute;
+  font-family: var(--font-accent);
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-white);
+}
+
+.plan__label--floor2 {
+  top: 2.4%;
+  left: 0;
+  width: 21%;
+  text-align: center;
+}
+
+.plan__label--entry {
+  top: 2.4%;
+  left: 45%;
+}
+
+.plan__label--vip {
+  top: 15.6%;
+  left: 70.45%;
+  width: 23.41%;
+  text-align: center;
+}
+
+.plan__label--soft {
+  top: 81.6%;
+  left: 52.84%;
+  width: 43.36%;
+  text-align: center;
+}
+
+/* Стойка бара */
+.plan__bar {
+  position: absolute;
+  top: 32%;
+  left: 53%;
+  width: 43%;
+  height: 41.3%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 6px;
+  background: #08303a;
+  box-shadow: inset 0 0 0 1px rgba(63, 217, 192, 0.25);
+  color: var(--color-white);
+  font: 700 40px/1 var(--font-accent);
+  text-transform: uppercase;
+}
+
+.plan__bar svg {
+  color: var(--aqua);
+  opacity: 0.6;
+}
+
+/* «Стулья» вокруг стола: белые точки сверху, снизу, слева и справа */
+.plan__table::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  pointer-events: none;
+  --dot: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 2px, transparent 2.5px);
+  background:
+    var(--dot) 50% 0 / 6px 6px no-repeat,
+    var(--dot) 50% 100% / 6px 6px no-repeat,
+    var(--dot) 0 50% / 6px 6px no-repeat,
+    var(--dot) 100% 50% / 6px 6px no-repeat;
+}
+
+/* круглые столики 2 этажа — стулья слева и справа */
+.plan__table--round::before {
+  background:
+    var(--dot) 0 50% / 6px 6px no-repeat,
+    var(--dot) 100% 50% / 6px 6px no-repeat;
+}
+
+/* диваны мягкой зоны (10–12) — по два места с каждой стороны */
+.plan__table[data-table="10"]::before,
+.plan__table[data-table="11"]::before,
+.plan__table[data-table="12"]::before {
+  background:
+    var(--dot) 0 30% / 6px 6px no-repeat,
+    var(--dot) 0 70% / 6px 6px no-repeat,
+    var(--dot) 100% 30% / 6px 6px no-repeat,
+    var(--dot) 100% 70% / 6px 6px no-repeat;
+}
+
+/* большой VIP-стол 13 — ряд мест сверху и по месту с боков */
+.plan__table[data-table="13"]::before {
+  background:
+    var(--dot) 8px 0 / 14px 6px repeat-x,
+    var(--dot) 0 50% / 6px 6px no-repeat,
+    var(--dot) 100% 50% / 6px 6px no-repeat;
+  background-clip: content-box;
+  padding: 0 12px;
+}
+
+.plan__table--busy::before {
+  opacity: 0.35;
+}
+
+.plan__table::after {
+  content: attr(data-table);   /* номер стола из data-table */
+}
+
+.plan__table--busy,
+.plan__table--busy:hover {
+  background-color: #4f6f75;
+  color: #c9dcdf;
+}
+
+/* Большой логотип на первом экране — фото с неоновой вывеской */
+.hero__title.user-photo {
+  object-fit: contain;
+}
+
+.nav__link:hover,
+.nav__link--active {
+  color: var(--aqua-soft);
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 32px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='32' viewBox='0 0 200 32' preserveAspectRatio='none'%3E%3Cpath d='M0 32 V16 Q25 0 50 16 T100 16 T150 16 T200 16 V32 Z' fill='%23041f27'/%3E%3C/svg%3E") repeat-x left bottom / 200px 32px;
+  z-index: -1;            /* под содержимым блока выше */
+  pointer-events: none;
+}
+
+/* 4) Карточки блюд, напитков и раскрытая карточка: тёмные (чуть светлее фона), тонкая рамка, мягкая тень.
+      Иерархия: светлое жирное название → приглушённое описание → крупная аквамариновая цена */
+.card,
+.drink,
+.dish {
+  --ph-bg: #15505d;               /* заглушка фото внутри тёмной карточки */
+  background: var(--card-bg);
+  background-clip: padding-box;
+  color: var(--card-text);
+  box-shadow: var(--card-shadow);
+  transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+}
+
+.card:hover,
+.drink:hover {
+  border-color: var(--card-border-hover);
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-4px);
+}
+
+/* выбранная («раскрытая») карточка не приподнята — ряд остаётся ровным, видна только рамка */
+.card--active,
+.drink--active {
+  border-color: var(--card-border-hover);
+}
+
+.card__info,
+.drink__desc,
+.dish__info {
+  color: var(--card-muted);
+}
+
+.card .price,
+.drink .price {
+  color: var(--aqua);
+  font-size: 32px;
+  line-height: 40px;
+}
+
+.card .price small,
+.drink .price small {
+  color: var(--card-muted);
+  font-size: 14px;
+}
+
+/* «Подробнее»: контурная кнопка, у всех карточек одинаковая; рядом — квадратная кнопка корзины */
+.card .btn-small--white,
+.drink .btn-small--white {
+  width: 114px;
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px rgba(127, 227, 209, 0.6);
+  color: var(--aqua-soft);
+}
+
+.card .btn-small--white:hover,
+.drink .btn-small--white:hover {
+  background-color: var(--aqua);
+  color: var(--sea-deep);
+}
+
+.card .cart-btn:hover,
+.drink .cart-btn:hover {
+  background-color: #10937f;
+  box-shadow: none;
+}
+
+.card__photo,
+.drink__photo {
+  background: var(--ph-bg);
+}
+
+/* заглушки фото в тёмных карточках — спокойная штриховка, без яркой «зебры» */
+.card .ph,
+.drink .ph,
+.dish .ph {
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.07) 0 12px, transparent 12px 24px),
+    var(--ph-bg);
+}
+
+/* счётчик в раскрытой карточке — тёмный, в цвет карточки (в корзине и заказе остаётся прежний) */
+.dish .counter {
+  top: 392px;
+  left: 668px;
+  width: 112px;
+  height: 36px;
+  border: 1px solid rgba(127, 227, 209, 0.45);
+  border-radius: var(--radius);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.dish .counter__btn {
+  width: 32px;
+}
+
+.dish .counter__value {
+  color: var(--card-text);
+  line-height: 34px;
+}
+
+/* В шапке Аквамарина пунктов больше, чем в delivery-eat (Бар, Фотоотчёты),
+   поэтому чуть уменьшаем логотип и расстояния, чтобы всё помещалось в одну строку */
+.header .logo-text {
+  font-size: 28px;
+}
+
+/* ===== Афиши «Новости и акции» без картинок: HTML + CSS в цветах «Аквамарина».
+   Форма как у карточек блюд (скругление, мягкая тень), фон — светлый аквамарин с волнами.
+   Размер текста задан в em: в окне акции та же афиша просто меньше. ===== */
+.promo__link--poster {
+  border-radius: var(--radius-card);
+  box-shadow: var(--card-shadow);
+}
+
+.promo__link--poster:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+.promo-poster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  width: 281px;
+  height: 350px;
+  padding: 24px 20px;
+  border-radius: var(--radius-card);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='30' viewBox='0 0 120 30'%3E%3Cpath d='M0 15 Q15 5 30 15 T60 15 T90 15 T120 15' fill='none' stroke='%230b7a6c' stroke-opacity='0.12' stroke-width='2'/%3E%3C/svg%3E"),
+    linear-gradient(165deg, var(--card-bg) 0%, var(--aqua-soft) 100%);
+  color: var(--card-text);
+  font-family: var(--font-main);
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Вторая и третья афиши — другой оттенок, чтобы лента не сливалась */
+.promo-poster--club {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='30' viewBox='0 0 120 30'%3E%3Cpath d='M0 15 Q15 5 30 15 T60 15 T90 15 T120 15' fill='none' stroke='%237fe3d1' stroke-opacity='0.18' stroke-width='2'/%3E%3C/svg%3E"),
+    linear-gradient(165deg, var(--sea-surface) 0%, var(--sea-deep) 100%);
+  color: var(--color-white);
+}
+
+.promo-poster--cocktail {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='30' viewBox='0 0 120 30'%3E%3Cpath d='M0 15 Q15 5 30 15 T60 15 T90 15 T120 15' fill='none' stroke='%230b7a6c' stroke-opacity='0.12' stroke-width='2'/%3E%3C/svg%3E"),
+    linear-gradient(165deg, var(--aqua-soft) 0%, var(--card-bg) 100%);
+}
+
+.promo-poster__kicker {
+  font-size: 1.6em;
+  font-weight: 800;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+/* Крупная цифра скидки */
+.promo-poster__big {
+  color: var(--card-accent);
+  font-family: var(--font-accent);   /* крупная надпись афиши — шрифтом заголовков */
+  font-size: 5em;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.promo-poster__title {
+  font-size: 1.35em;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.promo-poster__cond {
+  margin-top: 0.4em;
+  padding: 0.35em 0.9em;
+  border-radius: 999px;
+  background: var(--card-accent);
+  color: var(--color-white);
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.promo-poster--club .promo-poster__big {
+  color: var(--aqua);
+}
+
+.promo-poster--club .promo-poster__cond {
+  background: var(--aqua);
+  color: var(--card-text);
+}
+
+/* В окне акции афиша меньше (224 × 279, как картинка в delivery-eat) */
+.promo-modal__img.promo-poster {
+  width: 224px;
+  height: 279px;
+  font-size: 12.75px;
+}
+
+/* Фото с подписью-полосой сверху (например, img/тарелка.jpg): картинка выше рамки на 35%
+   и прижата к низу, поэтому верхняя полоса уходит за край (рамка с overflow: hidden).
+   Вертикальный object-position и увеличение из фото-слайдера полосу не открывают. */
+.user-photo--crop-top {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 135%;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+/* ===================================================================
+   Плавные переходы между блоками (швы между разными фонами не видны)
+   Все слои — ::before/::after с z-index: -1 у блока без своего z-index: они рисуются
+   под содержимым ВСЕХ блоков (текст, кнопки, фото, стрелки остаются сверху) и не ловят клики.
+   =================================================================== */
+
+/* 1) Первый экран → «О нашем заведении»: фон с фото переносим в слой ::before
+      и растворяем его нижние 140px в фоне страницы (там уже видны волны) */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to bottom, rgba(5, 36, 48, 0.95) 0%, rgba(10, 58, 70, 0.75) 30%, rgba(10, 58, 70, 0.8) 72%, var(--sea-mid) 100%),
+    url("../img/HWJmq6OKUrFFgUdUEBtx3INLkaNZsQXXE0eGA1C2sC6G2XJEotCA0Ddy-pCVEC2WlLoDhl020jDLhw4QDVm4cikNbjtVng.jpg") center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 140px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 140px), transparent 100%);
+  pointer-events: none;
+}
+
+/* 2) Аквамариновая полоса «Новости и акции»: цвет полосы — в слое ::before, который выходит
+      на 90px вверх и вниз и там плавно гаснет; внутри самой полосы цвет прежний, сплошной */
+.promo--home::before {
+  content: "";
+  position: absolute;
+  top: -90px;
+  bottom: -90px;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  background: var(--color-red);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 90px, #000 calc(100% - 90px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 90px, #000 calc(100% - 90px), transparent 100%);
+  pointer-events: none;
+}
+
+/* 3) Блоки → подвал: над волной подвала — дымка цвета подвала, гаснущая вверх на 110px
+      (волнистый край остаётся виден, но не обрывается резко). Дымка доходит до самого подвала:
+      нижние 16px волны (впадины между гребнями) тоже под ней — иначе по нижнему краю дымки
+      шла светлая полоса-«линия» между «Контактами» и подвалом */
+.footer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  z-index: -1;
+  height: 126px;
+  background: linear-gradient(to top, rgba(4, 31, 39, 0.85) 0, rgba(4, 31, 39, 0.85) 16px, rgba(4, 31, 39, 0.4) 65.5px, rgba(4, 31, 39, 0) 100%);
+  pointer-events: none;
+}
+
+/* 4) Внутренние страницы: шапка → заголовок страницы и содержимое.
+      Под шапкой — цвет низа шапки, плавно уходящий в фон страницы на ~125px
+      (слой фона body, поэтому всегда под всем содержимым) */
+.page:not(.page--home) {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='40' viewBox='0 0 160 40'%3E%3Cpath d='M0 20 Q20 8 40 20 T80 20 T120 20 T160 20' fill='none' stroke='%237fe3d1' stroke-opacity='0.07' stroke-width='2'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, rgba(10, 58, 70, 0.9) 144px, rgba(10, 58, 70, 0.45) 200px, rgba(10, 58, 70, 0) 270px),
+    linear-gradient(180deg, var(--sea-surface) 0%, var(--sea-mid) 35%, var(--sea-deep) 100%);
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-size: 160px 40px, 100% 100%, 100% 100%;
+}
+
+.header:not(.header--overlay) {
+  border-bottom-color: rgba(127, 227, 209, 0.18);   /* «пена» под шапкой мягче, без резкой линии */
+}

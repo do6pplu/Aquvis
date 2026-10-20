@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Фотоотчёт — кафе «Аквамарин», ст. Клявлино</title>
+  <meta name="description" content="Фотоотчёт вечера в кафе «Аквамарин» (ст. Клявлино, ул. Жукова, 10): фотографии зала, банкетных столов и гостей.">
+  <meta name="theme-color" content="#052430">
+  <!-- Open Graph: превью ссылки в соцсетях и мессенджерах (адрес картинки относительный — домена пока нет) -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="Аквамарин">
+  <meta property="og:title" content="Фотоотчёт — кафе «Аквамарин», ст. Клявлино">
+  <meta property="og:description" content="Фотоотчёт вечера в кафе «Аквамарин» (ст. Клявлино, ул. Жукова, 10): фотографии зала, банкетных столов и гостей.">
+  <meta property="og:image" content="img/vk-456239031.jpg">
+  <meta property="og:image:alt" content="Банкетный зал с накрытыми столами и праздничным декором">
+  <!-- Общий файл стилей для всех страниц -->
+  <!-- Иконка сайта: пивная бутылка на аквамариновом фоне (SVG; .ico — для старых браузеров; PNG 180×180 — для iOS) -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- jQuery 3.7.1 (локальный файл js/jquery.min.js). Подключаем ПЕРЕД js/script.js и тоже с defer:
+       defer-скрипты выполняются строго по порядку, поэтому $ уже есть, когда запускается script.js -->
+  <script src="js/jquery.min.js" defer></script>
+  <!-- Общий скрипт: все интерактивные элементы, написан на jQuery (defer — выполнится после разбора страницы) -->
+  <script src="js/script.js" defer></script>
+</head>
+<body class="page page--report">
+
+  <!-- ===== Шапка сайта (одинаковая на всех страницах) ===== -->
+  <header class="header">
+    <div class="container header__inner">
+      <!-- Логотип: ведёт на главную -->
+      <a class="header__logo" href="index.html" aria-label="Аквамарин — на главную">
+        <span class="logo-text">Аквамарин</span>
+      </a>
+
+      <!-- Главное меню. «Ещё...» раскрывает список остальных страниц (js-dropdown) -->
+      <nav class="header__nav" aria-label="Главное меню">
+        <ul class="nav">
+          <li><a class="nav__link" href="index.html">Главная</a></li>
+          <li><a class="nav__link" href="menu.html">Меню</a></li>
+          <li><a class="nav__link" href="bar.html">Бар</a></li>
+          <li><a class="nav__link nav__link--active" href="photos.html">Фотоотчёты</a></li>
+          <li class="nav__more js-dropdown">
+            <button class="nav__link nav__toggle js-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Ещё...</button>
+            <ul class="dropdown js-dropdown-menu" hidden>
+              <li><a class="dropdown__link" href="cart.html">Корзина</a></li>
+              <li><a class="dropdown__link" href="account.html">Личный кабинет</a></li>
+              <li><a class="dropdown__link" href="order.html">Мой заказ</a></li>
+              <li><a class="dropdown__link" href="crud.html">CRUD (пользователи)</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Кнопки справа: телефон, личный кабинет, корзина, бронирование -->
+      <div class="header__actions">
+        <a class="icon-btn icon-btn--dark" href="tel:+70000000000" aria-label="Позвонить: +7 (000) 000-00-00">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true" focusable="false"><path d="M25.7532 18.3788C24.039 18.3788 22.3558 18.1107 20.7607 17.5836C19.9791 17.317 19.0183 17.5615 18.5413 18.0515L15.393 20.4281C11.7418 18.4791 9.49278 16.2308 7.57041 12.6071L9.87712 9.54078C10.4764 8.94228 10.6914 8.06801 10.4338 7.2477C9.90446 5.64426 9.63555 3.96185 9.63555 2.24685C9.63562 1.00793 8.6277 0 7.38884 0H2.24678C1.00792 0 0 1.00793 0 2.24678C0 16.4473 11.5527 28 25.7532 28C26.9921 28 28 26.9921 28 25.7532V20.6255C27.9999 19.3867 26.992 18.3788 25.7532 18.3788Z" fill="white"/></svg>
+        </a>
+        <a class="icon-btn icon-btn--red icon-btn--user" href="account.html" aria-label="Личный кабинет">
+          <svg class="icon-btn__head" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false"><path d="M6.99998 13.9995C8.92325 13.9995 10.5887 13.3097 11.9494 11.9487C13.3102 10.588 14 8.92303 14 6.99954C14 5.0767 13.3102 3.41152 11.9492 2.05033C10.5882 0.689798 8.92303 0 6.99998 0C5.07648 0 3.41152 0.689798 2.05077 2.05055C0.69002 3.4113 0 5.07648 0 6.99954C0 8.92303 0.69002 10.5882 2.05099 11.949C3.41196 13.3095 5.07715 13.9995 6.99998 13.9995V13.9995Z" fill="white"/></svg>
+          <svg class="icon-btn__body" width="23" height="15" viewBox="0 0 23 15" fill="none" aria-hidden="true" focusable="false"><path d="M22.9443 7.88197C22.907 7.3448 22.8317 6.75883 22.7209 6.14005C22.609 5.51664 22.4649 4.92731 22.2925 4.38866C22.1143 3.83193 21.872 3.28214 21.5725 2.75527C21.2617 2.20842 20.8965 1.73225 20.4868 1.34041C20.0584 0.930483 19.5338 0.600902 18.9272 0.360499C18.3228 0.121358 17.6529 0.000210326 16.9363 0.000210326C16.6549 0.000210326 16.3827 0.115679 15.8571 0.45788C15.5336 0.668837 15.1553 0.912815 14.7329 1.18266C14.3718 1.41276 13.8826 1.62834 13.2783 1.82353C12.6888 2.01429 12.0902 2.11104 11.4994 2.11104C10.9086 2.11104 10.3102 2.01429 9.72001 1.82353C9.11637 1.62855 8.62716 1.41297 8.26645 1.18287C7.84811 0.915549 7.46952 0.671571 7.1412 0.45767C6.61623 0.115469 6.34386 0 6.06244 0C5.34565 0 4.67597 0.121358 4.0717 0.360709C3.46554 0.600691 2.94078 0.930272 2.51192 1.34062C2.10242 1.73267 1.73708 2.20863 1.42664 2.75527C1.12735 3.28214 0.885052 3.83172 0.706696 4.38887C0.534439 4.92752 0.390365 5.51664 0.278472 6.14005C0.16763 6.75799 0.0923332 7.34417 0.0551055 7.8826C0.0185087 8.4101 0 8.95758 0 9.51053C0 10.9496 0.457459 12.1146 1.35955 12.9738C2.25049 13.8216 3.42937 14.2517 4.86295 14.2517H18.1371C19.5706 14.2517 20.7491 13.8218 21.6402 12.9738C22.5425 12.1152 23 10.95 23 9.51031C22.9998 8.95484 22.9811 8.40694 22.9443 7.88197V7.88197Z" fill="white"/></svg>
+        </a>
+        <!-- Корзина: белая кнопка с красной тележкой (вид из шапки страницы заказа).
+             Скрыта, пока корзина пуста; число товаров — в красном кружке (js-cart-count) -->
+        <a class="icon-btn icon-btn--white header__cart js-header-cart" href="cart.html" aria-label="Корзина" hidden>
+          <svg width="24" height="23" viewBox="0 0 24 23" fill="none" aria-hidden="true" focusable="false"><path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6M10 21C10 21.5523 9.55228 22 9 22C8.44772 22 8 21.5523 8 21C8 20.4477 8.44772 20 9 20C9.55228 20 10 20.4477 10 21ZM21 21C21 21.5523 20.5523 22 20 22C19.4477 22 19 21.5523 19 21C19 20.4477 19.4477 20 20 20C20.5523 20 21 20.4477 21 21Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#0b7a6c"/></svg>
+          <span class="header__cart-count js-cart-count">0</span>
+        </a>
+        <button class="btn btn--header js-open-booking" type="button">Забронировать</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== Фотоотчёт одного вечера (без подписи-названия): сетка 4×6, при наведении — значок лупы, клик — просмотр ===== -->
+    <section class="report section--report js-gallery">
+      <div class="container">
+        <div class="page-head page-head--photos">
+          <span class="bar"></span>
+          <h1 class="page-head__title">Фотоотчёты</h1>
+        </div>
+
+        <ul class="report__grid js-page-shuffle">
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/As3U-S2-LmtNgHA04Q9BsM8l2GckbbvLSDeW5n7IQgiNZHbM1TnFMKupERHeEYvSqIHLLEr090DBIkOjyaTU_h8rqn36Iw.jpg"><img class="user-photo" src="img/As3U-S2-LmtNgHA04Q9BsM8l2GckbbvLSDeW5n7IQgiNZHbM1TnFMKupERHeEYvSqIHLLEr090DBIkOjyaTU_h8rqn36Iw.jpg" alt="Неоновая вывеска «Аквамарин» с силуэтами танцующих" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/vk-456239021.jpg"><img class="user-photo" src="img/vk-456239021.jpg" alt="Банкетный зал, украшенный к празднику: сердце из шаров и подсветка" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/vk-456239029.jpg"><img class="user-photo" src="img/vk-456239029.jpg" alt="Праздничное оформление зала: сердце из шаров и воздушные шары" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/vk-456239030.jpg"><img class="user-photo" src="img/vk-456239030.jpg" alt="Сервированные банкетные столы в зале кафе" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/vk-456239031.jpg"><img class="user-photo" src="img/vk-456239031.jpg" alt="Банкетный зал с накрытыми столами и праздничным декором" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/vk-456239032.jpg"><img class="user-photo" src="img/vk-456239032.jpg" alt="Зал кафе с полосатой колонной и праздничной сценой" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/vk-456239045.jpg"><img class="user-photo" src="img/vk-456239045.jpg" alt="Накрытый стол у окна в малом зале" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/DeUgSl-oDeHJw_wkmfjtd8YtFwAuL6v9s2ATKl3KLFEU1GZWFBAqqeVxghTGVr4Uv972BcWiucQAkVCqLNy64g-s.jpg"><img class="user-photo" src="img/DeUgSl-oDeHJw_wkmfjtd8YtFwAuL6v9s2ATKl3KLFEU1GZWFBAqqeVxghTGVr4Uv972BcWiucQAkVCqLNy64g-s.jpg" alt="Гость вечеринки у барной стойки" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/HWJmq6OKUrFFgUdUEBtx3INLkaNZsQXXE0eGA1C2sC6G2XJEotCA0Ddy-pCVEC2WlLoDhl020jDLhw4QDVm4cikNbjtVng.jpg"><img class="user-photo" src="img/HWJmq6OKUrFFgUdUEBtx3INLkaNZsQXXE0eGA1C2sC6G2XJEotCA0Ddy-pCVEC2WlLoDhl020jDLhw4QDVm4cikNbjtVng.jpg" alt="Гости на вечеринке в кафе «Аквамарин»" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/bQk37vS4Aey5yAGyPp2QP6pFS_A20w3YyH66hu_uJvp8a3weS6UORZKD2UI__lVvhiaEGsumpN-MthCpcKM6Sg1rJTx6bw.jpg"><img class="user-photo" src="img/bQk37vS4Aey5yAGyPp2QP6pFS_A20w3YyH66hu_uJvp8a3weS6UORZKD2UI__lVvhiaEGsumpN-MthCpcKM6Sg1rJTx6bw.jpg" alt="Гости у барной стойки" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/wgIE5p63vAcTK0rT7BwRe3C0VO3nJroPv4HDaj9E8krbmKH-69eZ6EOOHa_2c7Xcsy6NwFNzpfmowD30v0S1liY8.jpg"><img class="user-photo" src="img/wgIE5p63vAcTK0rT7BwRe3C0VO3nJroPv4HDaj9E8krbmKH-69eZ6EOOHa_2c7Xcsy6NwFNzpfmowD30v0S1liY8.jpg" alt="Компания друзей на вечеринке в «Аквамарине»" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/XXXL%20%285%29.webp"><img class="user-photo" src="img/XXXL%20%285%29.webp" alt="Длинный банкетный стол, сервированный к Новому году" width="282" height="243"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/XXXL.webp"><img class="user-photo" src="img/XXXL.webp" alt="Банкетный зал «Аквамарина»: колонна в красно-белую полоску и жёлтый потолок" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/XXXL%20%283%29.webp"><img class="user-photo" src="img/XXXL%20%283%29.webp" alt="Коридор кафе с плиточным полом и зелёной росписью на стене" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/XXXL%20%286%29.webp"><img class="user-photo" src="img/XXXL%20%286%29.webp" alt="Небольшой зал с кожаным диваном" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/XXXL%20%282%29.webp"><img class="user-photo" src="img/XXXL%20%282%29.webp" alt="Банкетный стол: салаты, яйца с икрой, сельдь и другие закуски" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/vk-456239032.jpg"><img class="user-photo" src="img/vk-456239032.jpg" alt="Зал кафе с полосатой колонной и праздничной сценой" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/vk-456239045.jpg"><img class="user-photo" src="img/vk-456239045.jpg" alt="Накрытый стол у окна в малом зале" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/DeUgSl-oDeHJw_wkmfjtd8YtFwAuL6v9s2ATKl3KLFEU1GZWFBAqqeVxghTGVr4Uv972BcWiucQAkVCqLNy64g-s.jpg"><img class="user-photo" src="img/DeUgSl-oDeHJw_wkmfjtd8YtFwAuL6v9s2ATKl3KLFEU1GZWFBAqqeVxghTGVr4Uv972BcWiucQAkVCqLNy64g-s.jpg" alt="Гость вечеринки у барной стойки" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/HWJmq6OKUrFFgUdUEBtx3INLkaNZsQXXE0eGA1C2sC6G2XJEotCA0Ddy-pCVEC2WlLoDhl020jDLhw4QDVm4cikNbjtVng.jpg"><img class="user-photo" src="img/HWJmq6OKUrFFgUdUEBtx3INLkaNZsQXXE0eGA1C2sC6G2XJEotCA0Ddy-pCVEC2WlLoDhl020jDLhw4QDVm4cikNbjtVng.jpg" alt="Гости на вечеринке в кафе «Аквамарин»" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/bQk37vS4Aey5yAGyPp2QP6pFS_A20w3YyH66hu_uJvp8a3weS6UORZKD2UI__lVvhiaEGsumpN-MthCpcKM6Sg1rJTx6bw.jpg"><img class="user-photo" src="img/bQk37vS4Aey5yAGyPp2QP6pFS_A20w3YyH66hu_uJvp8a3weS6UORZKD2UI__lVvhiaEGsumpN-MthCpcKM6Sg1rJTx6bw.jpg" alt="Гости у барной стойки" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/wgIE5p63vAcTK0rT7BwRe3C0VO3nJroPv4HDaj9E8krbmKH-69eZ6EOOHa_2c7Xcsy6NwFNzpfmowD30v0S1liY8.jpg"><img class="user-photo" src="img/wgIE5p63vAcTK0rT7BwRe3C0VO3nJroPv4HDaj9E8krbmKH-69eZ6EOOHa_2c7Xcsy6NwFNzpfmowD30v0S1liY8.jpg" alt="Компания друзей на вечеринке в «Аквамарине»" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/As3U-S2-LmtNgHA04Q9BsM8l2GckbbvLSDeW5n7IQgiNZHbM1TnFMKupERHeEYvSqIHLLEr090DBIkOjyaTU_h8rqn36Iw.jpg"><img class="user-photo" src="img/As3U-S2-LmtNgHA04Q9BsM8l2GckbbvLSDeW5n7IQgiNZHbM1TnFMKupERHeEYvSqIHLLEr090DBIkOjyaTU_h8rqn36Iw.jpg" alt="Неоновая вывеска «Аквамарин» с силуэтами танцующих" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+          <li class="report__item"><button class="report__link js-lightbox-open" type="button" data-src="img/vk-456239021.jpg"><img class="user-photo" src="img/vk-456239021.jpg" alt="Банкетный зал, украшенный к празднику: сердце из шаров и подсветка" width="282" height="243" loading="lazy"><span class="report__zoom" aria-hidden="true"></span></button></li>
+        </ul>
+        <!-- Страницы альбомов: переключение подсвечивает номер и меняет порядок фото (демо) -->
+        <nav aria-label="Страницы">
+        <ul class="pagination js-pagination">
+          <li><button class="pagination__link pagination__link--active js-page" type="button" data-page="1" aria-current="page">1</button></li>
+          <li><button class="pagination__link js-page" type="button" data-page="2">2</button></li>
+          <li><button class="pagination__link js-page" type="button" data-page="3">3</button></li>
+          <li><button class="pagination__link js-page" type="button" data-page="4">4</button></li>
+          <li><button class="pagination__link js-page" type="button" data-page="5">5</button></li>
+          <li><button class="pagination__link js-page" type="button" data-page="6">6</button></li>
+          <li><button class="pagination__link js-page" type="button" data-page="7">7</button></li>
+        </ul>
+        </nav>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Подвал (одинаковый на всех страницах) ===== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a class="logo-text logo-text--footer" href="index.html">Аквамарин</a>
+      </div>
+
+      <div class="footer__middle">
+        <!-- Пункты подвала — заглушки, тоже неактивны (попапы подключим позже) -->
+        <ul class="footer__nav">
+          <li><a class="footer__link">Instagram</a></li>
+          <li><a class="footer__link">Telegram</a></li>
+          <li class="footer__nav-shift"><a class="footer__link">aquamarine@example.com</a></li>
+          <li><a class="footer__link">WhatsApp</a></li>
+          <li><a class="footer__link">ВКонтакте</a></li>
+          <li class="footer__nav-shift"><a class="footer__link">www.aquamarine.example</a></li>
+        </ul>
+        <p class="footer__note">© 2026 Аквамарин. Все права защищены.</p>
+      </div>
+
+      <div class="footer__contacts">
+        <!-- Номер-заглушка: настоящий телефон пока не дан -->
+        <a class="footer__phone" href="tel:+70000000000">+7 (000) 000-00-00</a>
+        <p class="footer__hours">Онлайн-бронирование — круглосуточно</p>
+        <ul class="footer__socials">
+          <li><a class="footer__social" href="https://vk.ru/id545852893" target="_blank" rel="noopener" aria-label="ВКонтакте"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" focusable="false"><rect width="30" height="30" rx="7" fill="currentColor" opacity="0.15"/><path d="M7 10h3c.3 4 2 6 3.2 6.4V10h2.8v3.6c1.2-.1 2.5-1.6 3-3.6h2.7c-.4 2.2-2 3.9-3.1 4.6 1.1.5 2.9 1.9 3.6 4.4h-3c-.6-1.7-1.9-3-3.2-3.1V19h-.4C10.4 19 7.2 16 7 10z" fill="currentColor"/></svg></a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== Всплывающее окно «Бронирование столика»: план зала (Frame 153/154) + форма.
+       Открывается всеми кнопками «Забронировать» (js-open-booking). Форма никуда не отправляется. ===== -->
+  <div class="modal modal--booking js-modal" data-modal="booking" hidden>
+    <div class="modal__overlay js-modal-close"></div>
+    <div class="modal__window" role="dialog" aria-modal="true" aria-labelledby="booking-title">
+      <button class="modal__close js-modal-close" type="button" aria-label="Закрыть"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M15 1L1 15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="white"/> <path d="M1 1L15 15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="white"/></svg></button>
+      <h2 class="modal__title" id="booking-title">Бронирование столика</h2>
+      <div class="booking">
+        <!-- План зала: на картинку наложены прозрачные кнопки-столы -->
+        <div class="plan">
+          <!-- Схема зала нарисована на HTML/CSS (как план в Delivery Eat, но в цветах «Аквамарина»):
+               подписи зон и стойка бара — декор (aria-hidden), выбор стола — кнопками ниже -->
+          <div class="plan__img plan__map" role="img" aria-label="План зала: 2 этаж (столы 15–25), столы 1–14, VIP-стол 13, бар и мягкая зона (столы 10–12)">
+            <span class="plan__floor2" aria-hidden="true"></span>
+            <span class="plan__stairs" aria-hidden="true"></span>
+            <span class="plan__label plan__label--floor2" aria-hidden="true">2 этаж</span>
+            <span class="plan__label plan__label--entry" aria-hidden="true">Вход</span>
+            <span class="plan__label plan__label--vip" aria-hidden="true">VIP</span>
+            <span class="plan__bar" aria-hidden="true"><svg width="40" height="44" viewBox="0 0 40 44" fill="none" focusable="false"><path d="M3 3h34L20 22z" fill="currentColor"/><path d="M20 22v16M11 41h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Бар</span>
+            <span class="plan__label plan__label--soft" aria-hidden="true">Мягкая зона</span>
+          </div>
+            <button class="plan__table js-plan-table" type="button" style="left:28.85%;top:12.68%;width:6.85%;height:5.54%" data-table="1" aria-label="Стол 1"></button>
+            <button class="plan__table js-plan-table" type="button" style="left:28.85%;top:22.57%;width:6.85%;height:5.54%" data-table="2" aria-label="Стол 2"></button>
+            <button class="plan__table plan__table--busy js-plan-table" type="button" style="left:28.85%;top:32.47%;width:6.85%;height:5.54%" data-table="3" aria-label="Стол 3 — занят" disabled></button>
+            <button class="plan__table js-plan-table" type="button" style="left:28.85%;top:42.31%;width:6.85%;height:5.54%" data-table="4" aria-label="Стол 4"></button>
+            <button class="plan__table js-plan-table" type="button" style="left:28.85%;top:52.15%;width:6.85%;height:5.54%" data-table="5" aria-label="Стол 5"></button>
+            <button class="plan__table js-plan-table" type="button" style="left:28.85%;top:62.00%;width:6.85%;height:5.54%" data-table="6" aria-label="Стол 6"></button>
+            <button class="plan__table plan__table--busy js-plan-table" type="button" style="left:28.85%;top:71.89%;width:6.85%;height:5.54%" data-table="7" aria-label="Стол 7 — занят" disabled></button>
+            <button class="plan__table js-plan-table" type="button" style="left:28.85%;top:81.78%;width:6.85%;height:5.54%" data-table="8" aria-label="Стол 8"></button>
+            <button class="plan__table js-plan-table" type="button" style="left:28.85%;top:91.67%;width:6.85%;height:5.54%" data-table="9" aria-label="Стол 9"></button>
+            <button class="plan__table js-plan-table" type="button" style="left:52.84%;top:86.94%;width:8.02%;height:8.19%" data-table="10" aria-label="Стол 10"></button>
+            <button class="plan__table js-plan-table" type="button" style="left:70.57%;top:86.99%;width:8.02%;height:8.19%" data-table="11" aria-label="Стол 11"></button>
+            <button class="plan__table js-plan-table" type="button" style="left:88.18%;top:87.03%;width:8.02%;height:8.19%" data-table="12" aria-label="Стол 12"></button>
+            <button class="plan__table plan__table--busy js-plan-table" type="button" style="left:70.45%;top:6.29%;width:23.41%;height:8.05%" data-table="13" aria-label="Стол 13 — занят" disabled></button>
+            <button class="plan__table js-plan-table" type="button" style="left:54.59%;top:19.40%;width:6.85%;height:5.54%" data-table="14" aria-label="Стол 14"></button>
+            <button class="plan__table plan__table--round js-plan-table" type="button" style="left:7.61%;top:9.56%;width:5.73%;height:4.64%" data-table="15" aria-label="Стол 15"></button>
+            <button class="plan__table plan__table--round js-plan-table" type="button" style="left:7.61%;top:18.03%;width:5.73%;height:4.64%" data-table="16" aria-label="Стол 16"></button>
+            <button class="plan__table plan__table--round js-plan-table" type="button" style="left:7.61%;top:26.50%;width:5.73%;height:4.64%" data-table="17" aria-label="Стол 17"></button>
+            <button class="plan__table plan__table--round plan__table--busy js-plan-table" type="button" style="left:7.61%;top:34.97%;width:5.73%;height:4.64%" data-table="18" aria-label="Стол 18 — занят" disabled></button>
+            <button class="plan__table plan__table--round js-plan-table" type="button" style="left:7.61%;top:43.45%;width:5.73%;height:4.64%" data-table="19" aria-label="Стол 19"></button>
+            <button class="plan__table plan__table--round js-plan-table" type="button" style="left:7.61%;top:51.92%;width:5.73%;height:4.64%" data-table="20" aria-label="Стол 20"></button>
+            <button class="plan__table plan__table--round js-plan-table" type="button" style="left:7.61%;top:60.39%;width:5.73%;height:4.64%" data-table="21" aria-label="Стол 21"></button>
+            <button class="plan__table plan__table--round plan__table--busy js-plan-table" type="button" style="left:7.61%;top:68.86%;width:5.73%;height:4.64%" data-table="22" aria-label="Стол 22 — занят" disabled></button>
+            <button class="plan__table plan__table--round js-plan-table" type="button" style="left:7.61%;top:77.33%;width:5.73%;height:4.64%" data-table="23" aria-label="Стол 23"></button>
+            <button class="plan__table plan__table--round js-plan-table" type="button" style="left:7.61%;top:85.80%;width:5.73%;height:4.64%" data-table="24" aria-label="Стол 24"></button>
+            <button class="plan__table plan__table--round js-plan-table" type="button" style="left:7.61%;top:94.27%;width:5.73%;height:4.64%" data-table="25" aria-label="Стол 25"></button>
+        </div>
+        <form class="booking__form form js-form" data-success="Спасибо! Мы перезвоним, чтобы подтвердить бронь." novalidate>
+          <p class="booking__hint">Выберите стол на плане: бирюзовые свободны, серые заняты.</p>
+          <p class="booking__table">Стол: <b class="js-plan-value">не выбран</b></p>
+          <input class="js-plan-input" type="hidden" name="table" value="">
+          <label class="line-field">
+            <input class="line-field__input" type="text" name="name" aria-label="Имя" placeholder="Ваше имя" required minlength="2" autocomplete="name">
+          </label>
+          <label class="line-field">
+            <input class="line-field__input js-phone" type="tel" name="phone" aria-label="Телефон" placeholder="+7 (999) 999-99-99" required autocomplete="tel">
+          </label>
+          <label class="line-field">
+            <input class="line-field__input" type="number" name="guests" aria-label="Количество гостей" placeholder="Кол-во гостей" required min="1" max="20">
+          </label>
+          <label class="line-field">
+            <input class="line-field__input" type="date" name="date" required aria-label="Дата">
+          </label>
+          <p class="form__error js-form-error" hidden></p>
+          <button class="btn btn--wide booking__submit" type="submit">Забронировать</button>
+          <p class="form__note">Нажимая на кнопку, вы даёте согласие на обработку персональных данных</p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Просмотр фото на весь экран (лайтбокс): стрелки, Esc, клик по фону ===== -->
+  <div class="modal modal--lightbox js-modal" data-modal="lightbox" hidden>
+    <div class="modal__overlay js-modal-close"></div>
+    <!-- Диалог — это div; внутри figure с самим фото и подписью-счётчиком, рядом кнопки -->
+    <div class="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр фото">
+      <figure class="lightbox__figure">
+        <img src="img/vk-456239030.jpg" alt="Фото из «Аквамарина»" class="user-photo lightbox__img js-lightbox-img" loading="lazy">
+        <figcaption class="lightbox__counter js-lightbox-counter">1 / 1</figcaption>
+      </figure>
+      <button class="lightbox__arrow lightbox__arrow--prev js-lightbox-prev" type="button" aria-label="Предыдущее фото"><svg width="20" height="52" viewBox="0 0 20 52" fill="none" aria-hidden="true" focusable="false"><path d="M16.9996 48.9993L2.99993 25.9999L16.9996 3.00042" stroke-width="5.99985" stroke-linecap="round" stroke-linejoin="round" stroke="#0b333d"/></svg></button>
+      <button class="lightbox__arrow lightbox__arrow--next js-lightbox-next" type="button" aria-label="Следующее фото"><svg width="20" height="52" viewBox="0 0 20 52" fill="none" aria-hidden="true" focusable="false"><path d="M3.00042 48.9993L17.0001 25.9999L3.00042 3.00042" stroke-width="5.99985" stroke-linecap="round" stroke-linejoin="round" stroke="#0b333d"/></svg></button>
+      <button class="modal__close lightbox__close js-modal-close" type="button" aria-label="Закрыть"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M15 1L1 15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="white"/> <path d="M1 1L15 15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="white"/></svg></button>
+    </div>
+  </div>
+
+  <!-- Короткие всплывающие сообщения внизу экрана («Добавлено в корзину» и т. п.) -->
+  <div class="toast js-toast" role="status" aria-live="polite" hidden></div>
+
+</body>
+</html>

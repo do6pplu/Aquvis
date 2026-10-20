@@ -1,0 +1,9 @@
+# Домен — заглушка https://aquamarine.example/ (заменить на настоящий адрес сайта)
+User-agent: *
+Allow: /
+Disallow: /cart.html
+Disallow: /order.html
+Disallow: /account.html
+Disallow: /crud.html
+
+Sitemap: https://aquamarine.example/sitemap.xml

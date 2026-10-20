@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Домен — заглушка https://aquamarine.example/ (заменить на настоящий адрес сайта). Служебные страницы (корзина, заказ, кабинет, CRUD) не включены -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://aquamarine.example/</loc>
+  </url>
+  <url>
+    <loc>https://aquamarine.example/menu.html</loc>
+  </url>
+  <url>
+    <loc>https://aquamarine.example/bar.html</loc>
+  </url>
+  <url>
+    <loc>https://aquamarine.example/photos.html</loc>
+  </url>
+  <url>
+    <loc>https://aquamarine.example/photo-report.html</loc>
+  </url>
+</urlset>
