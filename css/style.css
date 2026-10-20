@@ -4516,12 +4516,94 @@ textarea.field {
 }
 
 /* ===================================================================
-   Карусель «Новости и акции» на Swiper (см. script.js, раздел 8).
-   Промежуток между афишами задаёт Swiper (spaceBetween: 22 — отступ справа у каждой афиши),
-   поэтому собственный gap ленты после запуска Swiper обнуляем — раскладка та же, что была.
+   Слайдер «Новости и акции» на Swiper (см. script.js, раздел 8).
+   swiper-bundle.min.css подключён раньше style.css; ниже его стандартные стили
+   приводим к прежнему виду: те же «окно», стрелки и точки, что были до Swiper.
    =================================================================== */
+/* «Окно»: тени и подъём афиши при наведении не обрезаются (обрезка — clip-path и overflow-x: clip выше) */
+.promo__viewport.swiper {
+  z-index: auto;
+  overflow-y: visible;
+}
+
+/* промежуток между афишами задаёт Swiper (spaceBetween: 22), собственный gap ленты обнуляем */
 .promo__viewport.swiper-initialized .promo__list {
   gap: 0;
+}
+
+/* На десктопе убираем «3D-слои» из стилей Swiper (translate3d у ленты и translateZ у афиш):
+   из-за них браузер иначе сглаживает края афиш, а картинка должна совпадать с прежней до пикселя.
+   Во время прокрутки Swiper сам пишет transform ленте в style — он важнее этого правила */
+@media (min-width: 1024px) {
+  .promo__list.swiper-wrapper {
+    transform: none;
+  }
+
+  .swiper-backface-hidden .promo__card {
+    transform: none;
+    backface-visibility: visible;
+  }
+}
+
+/* ширина афиши — своя (Swiper по умолчанию растягивает слайд на 100%) */
+.promo__card {
+  width: auto;
+  height: auto;
+}
+
+/* стрелки: прежний вид (свой SVG), а не стандартные значки Swiper */
+.promo__arrow {
+  z-index: auto;
+  display: block;
+  width: auto;
+  height: auto;
+  margin-top: 0;
+  color: inherit;
+}
+
+.promo__arrow::after {
+  content: none;
+}
+
+.promo__arrow svg {
+  width: 20px;
+  height: 52px;
+}
+
+/* точки: прежние размеры, цвета и расстояния */
+.promo--home .dots.swiper-pagination {
+  bottom: auto;
+  left: 50%;
+  z-index: auto;
+  width: auto;
+}
+
+.dots__item.swiper-pagination-bullet {
+  opacity: 1;
+}
+
+/* у Swiper отступы точек заданы сильным селектором — перебиваем таким же по силе */
+.promo--home .dots .dots__item.swiper-pagination-bullet {
+  margin: 0;
+}
+
+.promo--home .dots .dots__item--active.swiper-pagination-bullet {
+  margin-right: 2px;
+}
+
+/* Без JS или если CDN со Swiper недоступен: стрелки не работают — прячем,
+   а афиши листаются обычной горизонтальной прокруткой с «примагничиванием» */
+.promo--home:not(.promo--swiper) .promo__arrow {
+  visibility: hidden;
+}
+
+.promo__viewport:not(.swiper-initialized) {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.promo__viewport:not(.swiper-initialized) .promo__card {
+  scroll-snap-align: start;
 }
 
 /* Кнопка-«бургер» для узких экранов: создаётся в script.js (раздел 4а), на десктопе не видна */
@@ -4597,7 +4679,7 @@ textarea.field {
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  /* меню — отдельной строкой во всю ширину; без JS оно просто раскрыто */
+  /* Без JS меню — обычный список под логотипом (кнопки-«бургера» нет) */
   .header__nav {
     order: 10;
     flex-basis: 100%;
@@ -4606,21 +4688,13 @@ textarea.field {
     border-top: 1px solid rgba(127, 227, 209, 0.25);
   }
 
-  .header--has-burger:not(.header--nav-open) .header__nav {
-    display: none;
-  }
-
-  /* шапка главной лежит поверх фото — у раскрытого меню свой фон */
-  .header--nav-open {
-    background: var(--header-bg);
-  }
-
   .nav {
     flex-direction: column;
     gap: 0;
   }
 
-  .nav__link {
+  .nav__link,
+  .dropdown__link {
     display: flex;
     align-items: center;
     width: 100%;
@@ -4629,11 +4703,19 @@ textarea.field {
     text-align: left;
   }
 
-  /* «Ещё...» раскрывается прямо в списке, а не всплывающим окошком */
+  /* «Ещё...» на узких экранах не нужен: весь список ссылок виден сразу */
+  .nav__toggle {
+    display: none;
+  }
+
+  .header .nav__more .dropdown[hidden] {
+    display: block !important;   /* перебивает [hidden] { display: none !important } */
+  }
+
   .dropdown {
     position: static;
     width: auto;
-    padding: 0 0 6px 16px;
+    padding: 0;
     border-radius: 0;
     background: none;
     box-shadow: none;
@@ -4641,11 +4723,69 @@ textarea.field {
   }
 
   .dropdown__link {
+    padding: 0;
+  }
+
+  .dropdown__link:hover,
+  .dropdown__link:focus-visible {
+    background: none;
+  }
+
+  /* С JS: меню — слой во весь экран поверх страницы. Он fixed (вне потока),
+     поэтому высота и раскладка шапки при открытии/закрытии не меняются ни на пиксель.
+     Логотип, иконки и «бургер» (крестик) остаются на своих местах поверх слоя */
+  .header--has-burger .header__nav {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
     display: flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 0 12px;
-    font-size: 17px;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    margin: 0;
+    padding: 104px 24px 112px;
+    border-top: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--sea-deep) linear-gradient(180deg, var(--sea-deep) 0%, var(--sea-mid) 100%);   /* непрозрачный: страница не просвечивает */
+    animation: fade-in 0.2s ease;
+  }
+
+  .header--has-burger:not(.header--nav-open) .header__nav {
+    display: none;
+  }
+
+  .header--has-burger .header__logo,
+  .header--has-burger .header__actions,
+  .header--has-burger .header__actions > *,
+  .header--has-burger .header__burger {
+    position: relative;
+    z-index: 1;
+  }
+
+  .header--has-burger .nav {
+    margin: auto 0;              /* список по центру экрана, а если не влезает — прокрутка */
+    padding: 8px 0;
+  }
+
+  .header--has-burger .nav__link,
+  .header--has-burger .dropdown__link {
+    justify-content: center;
+    min-height: 52px;
+    font-size: 22px;
+    text-align: center;
+  }
+
+  /* пока меню открыто, страница под ним не прокручивается и не сдвигается
+     (место полосы прокрутки сохраняется — scrollbar-gutter) */
+  .is-nav-open,
+  .is-nav-open body {
+    overflow: hidden;
+  }
+
+  .is-nav-open--gutter {
+    scrollbar-gutter: stable;
   }
 
   /* --- общие элементы --- */
@@ -4844,7 +4984,8 @@ textarea.field {
     right: -8px;
   }
 
-  .promo--home .dots {
+  .promo--home .dots,
+  .promo--home .dots.swiper-pagination {
     position: relative;
     top: auto;
     left: auto;
@@ -5807,15 +5948,16 @@ textarea.field {
     margin-right: auto;
   }
 
-  /* телефон и «Забронировать» — нижней строкой раскрытого меню */
+  /* телефон и «Забронировать» — внизу раскрытого меню (fixed: шапку не растягивают) */
   .header__actions > .icon-btn--dark {
     display: none;
-    order: 11;
   }
 
   .header--nav-open .header__actions > .icon-btn--dark {
+    position: fixed;
+    bottom: 32px;
+    left: 24px;
     display: flex;
-    margin: 6px 6px 4px 0;
   }
 
   .icon-btn {
@@ -5839,15 +5981,16 @@ textarea.field {
 
   .btn--header {
     display: none;
-    order: 12;
   }
 
   .header--nav-open .btn--header {
+    position: fixed;
+    right: 24px;
+    bottom: 30px;
+    left: 80px;
     display: flex;
-    flex: 1;
     width: auto;
     height: 48px;
-    margin: 6px 0 4px;
   }
 
   .page-head__title {
