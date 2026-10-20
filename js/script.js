@@ -54,6 +54,7 @@
      2. Шрифты (пока системные — раздел пустой)
      3. Корзина: хранение в localStorage и значок в шапке
      4. Шапка: выпадающее меню «Еще...»
+        4а. Шапка на узких экранах: кнопка-«бургер» (меню сворачивается)
      5. Всплывающие окна (открыть / закрыть по фону, крестику, Esc)
      6. Бронирование: выбор стола на плане зала
      7. Формы: проверка полей, маска телефона, сообщение об успехе
@@ -227,6 +228,48 @@ $(function () {
         $toggle.trigger('focus');   // нативно: toggle.focus()
       }
     });
+  });
+
+  /* ================================================================
+     4а. Шапка на узких экранах (< 1024px): кнопка-«бургер»
+         Кнопку создаём здесь, а не в HTML: на десктопе она скрыта (display: none в CSS),
+         а без JS меню просто остаётся раскрытым — ничего не теряется.
+         Состояние — класс header--nav-open у шапки и aria-expanded у кнопки.
+     ================================================================ */
+  $('.header').each(function () {
+    const $header = $(this);
+    const $nav = $header.find('.header__nav').first();
+    if (!$nav.length) return;
+    const navId = $nav.attr('id') || 'site-nav';
+    $nav.attr('id', navId);
+    const $burger = $(`<button class="header__burger" type="button" aria-expanded="false" aria-controls="${navId}" aria-label="Меню">
+        <span class="header__burger-line"></span><span class="header__burger-line"></span><span class="header__burger-line"></span>
+      </button>`);
+    $header.find('.header__inner').first().append($burger);
+    $header.addClass('header--has-burger');
+
+    const setOpen = (open) => {
+      $header.toggleClass('header--nav-open', open);
+      $burger.attr('aria-expanded', String(open));
+    };
+    $burger.on('click', (event) => {
+      event.stopPropagation();   // клик по кнопке не должен дойти до document (там закрытие)
+      setOpen(!$header.hasClass('header--nav-open'));
+    });
+    // клик вне шапки — закрыть меню
+    $(document).on('click', (event) => {
+      if (!$(event.target).closest($header).length) setOpen(false);
+    });
+    // Esc — закрыть и вернуть фокус на кнопку
+    $header.on('keydown', (event) => {
+      if (event.key === 'Escape' && $header.hasClass('header--nav-open')) {
+        setOpen(false);
+        $burger.trigger('focus');
+      }
+    });
+    // экран стал широким (поворот планшета, окно браузера) — меню снова обычное
+    const wide = window.matchMedia('(min-width: 1024px)');
+    $(wide).on('change', () => { if (wide.matches) setOpen(false); });
   });
 
   /* ================================================================
@@ -479,20 +522,24 @@ $(function () {
   /* ================================================================
      8. Карусель «Новости и акции»: стрелки, точки, клик по афише
      ================================================================ */
+  // Движок — Swiper 11 (подключён с jsDelivr в index.html): он даёт свайп пальцем на телефонах.
+  // Раньше лента двигалась только кликами по стрелкам и точкам (сенсорных обработчиков не было),
+  // поэтому на телефоне листать её было нельзя. Стрелки, точки, «по кругу» и вид на десктопе — прежние.
+  // Swiper работает с нашими классами (wrapperClass/slideClass), лишних обёрток в разметке нет.
+  // Если CDN недоступен (window.Swiper нет) — карусель работает по-старому, через transform.
   $('.js-carousel').each(function () {
     const $carousel = $(this);
+    const $viewport = $carousel.find('.promo__viewport').first();
     const $track = $carousel.find('.js-carousel-track').first();
     const $items = $carousel.find('.js-carousel-item');
     const $dots = $carousel.find('.js-carousel-dot');
     const positions = $dots.length || 1;
-    const visible = $items.length - positions + 1;
+    let visible = $items.length - positions + 1;
     let index = 0;
+    let swiper = null;
 
-    const go = (next) => {
-      index = (next + positions) % positions;   // по кругу
-      // .eq(i) — i-й элемент набора как jQuery; .prop('offsetLeft') — его DOM-свойство.
-      // Сдвиг делаем через .css('transform'), а плавность даёт CSS transition (как раньше)
-      $track.css('transform', `translateX(${-$items.eq(index).prop('offsetLeft')}px)`);
+    // точки и доступность: видимые афиши можно «потрогать» с клавиатуры, скрытые — нет
+    const mark = () => {
       $dots.each(function (i) {
         $(this).toggleClass('dots__item--active', i === index)
           .attr('aria-current', i === index ? 'true' : 'false');
@@ -503,6 +550,51 @@ $(function () {
         $(this).find('button').first().prop('tabIndex', shown ? 0 : -1);
       });
     };
+
+    const go = (next) => {
+      index = (next + positions) % positions;   // по кругу
+      if (swiper) {
+        swiper.slideTo(index);                  // Swiper сам двигает ленту (скорость — как раньше, 0,5 с)
+      } else {
+        // .eq(i) — i-й элемент набора как jQuery; .prop('offsetLeft') — его DOM-свойство.
+        // Сдвиг делаем через .css('transform'), а плавность даёт CSS transition (как раньше)
+        $track.css('transform', `translateX(${-$items.eq(index).prop('offsetLeft')}px)`);
+      }
+      mark();
+    };
+
+    if (typeof window.Swiper === 'function' && $viewport.length) {
+      // сколько афиш помещается в «окне»: на десктопе 4, на планшете 2, на телефоне 1
+      const countVisible = () => {
+        const step = $items.first().outerWidth() + 22;
+        visible = Math.max(1, Math.round(($viewport.innerWidth() + 22) / step));
+      };
+      swiper = new window.Swiper($viewport[0], {
+        wrapperClass: 'promo__list',     // наша лента
+        slideClass: 'promo__card',       // наши афиши
+        slidesPerView: 'auto',           // ширина афиши — из CSS
+        spaceBetween: 22,                // тот же промежуток, что был (gap 22px)
+        speed: 500,
+        simulateTouch: false,            // мышью ленту не тянем — на десктопе всё как раньше (стрелки, точки)
+        a11y: { enabled: false },        // доступность уже настроена своими атрибутами (aria-hidden, tabIndex)
+        on: {
+          // палец отпустили — лента встала на афишу: обновляем точки
+          slideChange(s) {
+            index = Math.min(s.activeIndex, positions - 1);
+            mark();
+          },
+          // поворот экрана / смена ширины: пересчитать, сколько афиш видно
+          resize() {
+            countVisible();
+            mark();
+          },
+        },
+      });
+      countVisible();
+    } else {
+      // запасной вариант без Swiper: при повороте телефона пересчитываем сдвиг ленты
+      $(window).on('resize', () => go(index));
+    }
 
     $carousel.find('.js-carousel-prev').first().on('click', () => go(index - 1));
     $carousel.find('.js-carousel-next').first().on('click', () => go(index + 1));

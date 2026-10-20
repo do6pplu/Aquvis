@@ -19,10 +19,15 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Swiper 11 (jsDelivr) — движок карусели «Новости и акции»: свайп пальцем на телефонах.
+       Подключён ДО style.css, чтобы наши стили карусели имели приоритет -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.2.10/swiper-bundle.min.css" integrity="sha384-gAPqlBuTCdtVcYt9ocMOYWrnBZ4XSL6q+4eXqwNycOr4iFczhNKtnYhF3NEXJM51" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.css">
   <!-- jQuery 3.7.1 (локальный файл js/jquery.min.js). Подключаем ПЕРЕД js/script.js и тоже с defer:
        defer-скрипты выполняются строго по порядку, поэтому $ уже есть, когда запускается script.js -->
   <script src="js/jquery.min.js" defer></script>
+  <!-- Swiper 11 (jsDelivr): тоже defer и до script.js. Если CDN недоступен, карусель работает по-старому (стрелки и точки) -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11.2.10/swiper-bundle.min.js" integrity="sha384-2UI1PfnXFjVMQ7/ZDEF70CR943oH3v6uZrFQGGqJYlvhh4g6z6uVktxYbOlAczav" crossorigin="anonymous" defer></script>
   <!-- Общий скрипт: все интерактивные элементы, написан на jQuery (defer — выполнится после разбора страницы) -->
   <script src="js/script.js" defer></script>
   <!-- Данные о заведении для поисковиков (schema.org): без телефона и часов работы — их пока нет -->
