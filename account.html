@@ -21,6 +21,13 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Шрифты (r16): 4 файла, которые нужны каждой странице, грузим сразу вместе со стилями.
+       Без этого браузер узнаёт о них только после разбора style.css, и текст перерисовывается
+       (и заново раскладывается) 4 раза подряд, пока идёт первая анимация — отсюда «подёргивания» -->
+  <link rel="preload" href="fonts/nunito-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/comfortaa-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/comfortaa-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
   <!-- jQuery 3.7.1 (локальный файл js/jquery.min.js). Подключаем ПЕРЕД js/script.js и тоже с defer:
        defer-скрипты выполняются строго по порядку, поэтому $ уже есть, когда запускается script.js -->
@@ -92,7 +99,7 @@
         </div>
 
         <div class="profile">
-          <img class="profile__avatar user-photo" src="img/игорь.jpg" alt="Игорь Петров" width="163" height="163">
+          <img class="profile__avatar user-photo" src="img/игорь.jpg" alt="Игорь Петров" width="163" height="163" srcset="img/opt/игорь-240.webp 240w, img/opt/игорь-480.webp 480w, img/opt/игорь-960.webp 960w, img/игорь.jpg 1280w" sizes="(max-width: 1023.98px) 120px, 1280px" decoding="async">
           <div class="profile__info">
             <p class="profile__name js-profile-name">Игорь Петров</p>
             <p class="profile__contact js-profile-phone">+7 (000) 000-00-00</p>

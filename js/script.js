@@ -128,6 +128,40 @@ $(function () {
     toastTimer = setTimeout(() => { $toast.prop('hidden', true); }, 2600);
   };
 
+  // Лёгкие копии больших фото для телефонов (r16): img/opt/<имя>-<ширина>.webp, оригиналы в img/ не тронуты.
+  // В HTML у таких <img> есть srcset/sizes: на экранах уже 1024px браузер берёт копию по ширине места,
+  // а на десктопе sizes = ширина оригинала, поэтому там грузится сам оригинал (вид как раньше).
+  // Если у <img> есть srcset, браузер показывает картинку из srcset, а не из src, — поэтому, когда
+  // скрипт меняет фото (слайдер «О нас», страницы фото, просмотр на весь экран), меняем и srcset.
+  // Запись: 'адрес оригинала': [ширина оригинала, [ширины копий]]
+  const PHOTO_VARIANTS = {
+    'img/vk-456239021.jpg': [2560, [480, 960, 1440]],
+    'img/vk-456239029.jpg': [2560, [480, 960, 1440]],
+    'img/vk-456239030.jpg': [2560, [480, 960, 1440]],
+    'img/vk-456239031.jpg': [2560, [480, 960, 1440]],
+    'img/vk-456239032.jpg': [2560, [480, 960, 1440]],
+    'img/vk-456239045.jpg': [1613, [480, 960, 1440]],
+    'img/DeUgSl-oDeHJw_wkmfjtd8YtFwAuL6v9s2ATKl3KLFEU1GZWFBAqqeVxghTGVr4Uv972BcWiucQAkVCqLNy64g-s.jpg': [1280, [480, 960]],
+    'img/HWJmq6OKUrFFgUdUEBtx3INLkaNZsQXXE0eGA1C2sC6G2XJEotCA0Ddy-pCVEC2WlLoDhl020jDLhw4QDVm4cikNbjtVng.jpg': [1280, [480, 960]],
+    'img/bQk37vS4Aey5yAGyPp2QP6pFS_A20w3YyH66hu_uJvp8a3weS6UORZKD2UI__lVvhiaEGsumpN-MthCpcKM6Sg1rJTx6bw.jpg': [1280, [480, 960]],
+    'img/wgIE5p63vAcTK0rT7BwRe3C0VO3nJroPv4HDaj9E8krbmKH-69eZ6EOOHa_2c7Xcsy6NwFNzpfmowD30v0S1liY8.jpg': [1280, [480, 960]],
+  };
+  // поставить фото src в <img>; mobileSizes — ширина места на телефоне (если у <img> ещё нет sizes)
+  const setPhoto = ($img, src, mobileSizes) => {
+    const variant = PHOTO_VARIANTS[src];
+    const sizes = mobileSizes || ($img.attr('sizes') || '').replace(/,\s*\d+px$/, '');
+    if (variant && sizes) {
+      const stem = src.slice(4).replace(/\.\w+$/, '');   // 'img/имя.jpg' → 'имя'
+      const list = variant[1].map((w) => `img/opt/${stem}-${w}.webp ${w}w`).concat(`${src} ${variant[0]}w`);
+      $img.attr('srcset', list.join(', ')).attr('sizes', `${sizes}, ${variant[0]}px`);
+    } else {
+      // фото без копий: srcset из одного этого же файла (1x). Просто убрать srcset нельзя —
+      // Chrome тогда может оставить масштаб от прежней копии, и фото покажется меньше
+      $img.attr('srcset', src).removeAttr('sizes');
+    }
+    $img.attr('src', src);
+  };
+
   /* ================================================================
      2. Шрифты: свой шрифт подключим в конце работы — пока системный, проверять нечего.
      ================================================================ */
@@ -558,46 +592,54 @@ $(function () {
       });
     };
 
-    // пока Swiper грузился, «окно» могли прокрутить пальцем (запасной режим) — сбрасываем,
-    // иначе сдвиг прокрутки сложился бы со сдвигом ленты
-    $viewport[0].scrollLeft = 0;
+    // r16: запускаем Swiper, когда браузер свободен (не позже чем через 0,5 с), — его настройка
+    // заметно нагружает телефон, а слайдер всё равно ниже первого экрана. Так появление страницы
+    // не ждёт Swiper (одна длинная задача делится на две короткие). requestIdleCallback нет в Safari — setTimeout
+    const whenIdle = window.requestIdleCallback
+      ? (fn) => window.requestIdleCallback(fn, { timeout: 500 })
+      : (fn) => setTimeout(fn, 1);
+    whenIdle(() => {
+      // пока Swiper грузился, «окно» могли прокрутить пальцем (запасной режим) — сбрасываем,
+      // иначе сдвиг прокрутки сложился бы со сдвигом ленты
+      $viewport[0].scrollLeft = 0;
 
-    new window.Swiper($viewport[0], {
-      slidesPerView: 1,
-      spaceBetween: 22,                  // тот же промежуток, что был (gap 22px)
-      speed: 350,                        // после свайпа лента доезжает быстро
-      threshold: 0,                      // лента идёт ровно за пальцем, без «отставания» на старте
-      rewind: true,                      // с последней позиции стрелка «вперёд» возвращает к первой (и наоборот)
-      grabCursor: true,
-      breakpoints: {
-        768: { slidesPerView: 2 },
-        1024: { slidesPerView: 4, speed: 500 },   // десктоп: как раньше — 4 афиши, сдвиг за 0,5 с
-      },
-      a11y: { enabled: false },          // доступность настроена своими атрибутами (aria-label, aria-hidden, tabIndex)
-      navigation: {
-        // стрелки стоят вне .swiper (иначе «окно» их обрежет), поэтому передаём сами элементы
-        prevEl: $section.find('.swiper-button-prev')[0],
-        nextEl: $section.find('.swiper-button-next')[0],
-      },
-      pagination: {
-        el: $section.find('.swiper-pagination')[0],
-        clickable: true,
-        // точки — кнопки с нашими классами (вид как раньше: активная — большая тёмная)
-        bulletActiveClass: 'swiper-pagination-bullet-active dots__item--active',
-        renderBullet: (i, className) =>
-          `<button class="${className} dots__item js-carousel-dot" type="button" aria-label="Слайд ${i + 1}"></button>`,
-      },
-      on: {
-        init(swiper) {
-          $section.addClass('promo--swiper');   // стрелки показываются только у рабочего слайдера
-          mark(swiper);
+      new window.Swiper($viewport[0], {
+        slidesPerView: 1,
+        spaceBetween: 22,                  // тот же промежуток, что был (gap 22px)
+        speed: 350,                        // после свайпа лента доезжает быстро
+        threshold: 0,                      // лента идёт ровно за пальцем, без «отставания» на старте
+        rewind: true,                      // с последней позиции стрелка «вперёд» возвращает к первой (и наоборот)
+        grabCursor: true,
+        breakpoints: {
+          768: { slidesPerView: 2 },
+          1024: { slidesPerView: 4, speed: 500 },   // десктоп: как раньше — 4 афиши, сдвиг за 0,5 с
         },
-        // лента встала на новую позицию (стрелка, точка или свайп)
-        snapIndexChange: mark,
-        // поворот экрана / смена ширины: другое число афиш в «окне»
-        breakpoint: (swiper) => setTimeout(() => mark(swiper)),
-      },
-    });
+        a11y: { enabled: false },          // доступность настроена своими атрибутами (aria-label, aria-hidden, tabIndex)
+        navigation: {
+          // стрелки стоят вне .swiper (иначе «окно» их обрежет), поэтому передаём сами элементы
+          prevEl: $section.find('.swiper-button-prev')[0],
+          nextEl: $section.find('.swiper-button-next')[0],
+        },
+        pagination: {
+          el: $section.find('.swiper-pagination')[0],
+          clickable: true,
+          // точки — кнопки с нашими классами (вид как раньше: активная — большая тёмная)
+          bulletActiveClass: 'swiper-pagination-bullet-active dots__item--active',
+          renderBullet: (i, className) =>
+            `<button class="${className} dots__item js-carousel-dot" type="button" aria-label="Слайд ${i + 1}"></button>`,
+        },
+        on: {
+          init(swiper) {
+            $section.addClass('promo--swiper');   // стрелки показываются только у рабочего слайдера
+            mark(swiper);
+          },
+          // лента встала на новую позицию (стрелка, точка или свайп)
+          snapIndexChange: mark,
+          // поворот экрана / смена ширины: другое число афиш в «окне»
+          breakpoint: (swiper) => setTimeout(() => mark(swiper)),
+        },
+      });
+    });   // whenIdle
   });
 
   // окно с подробностями акции
@@ -631,7 +673,8 @@ $(function () {
       // .fadeOut()/.fadeIn() не используем: затухание уже описано в CSS
       $img.addClass('is-fading');
       setTimeout(() => {
-        $img.attr('src', slides[index]).removeClass('is-fading');
+        setPhoto($img, slides[index]);   // src + srcset (см. «Помощники»)
+        $img.removeClass('is-fading');
       }, 180);
       $dots.each(function (i) { $(this).toggleClass('lines__item--active', i === index); });
     };
@@ -1299,9 +1342,9 @@ $(function () {
   const $lightbox = $('.js-modal[data-modal="lightbox"]').first();
   const box = { list: [], index: 0 };
   const showPhoto = () => {
-    $lightbox.find('.js-lightbox-img').first()
-      .attr('src', box.list[box.index])
-      .attr('alt', `Фото ${box.index + 1}`);
+    const $photo = $lightbox.find('.js-lightbox-img').first();
+    setPhoto($photo, box.list[box.index], '(max-width: 1023.98px) 100vw');   // на телефоне — копия по ширине экрана
+    $photo.attr('alt', `Фото ${box.index + 1}`);
     $lightbox.find('.js-lightbox-counter').first().text(`${box.index + 1} / ${box.list.length}`);
   };
   const openLightbox = (list, index) => {
@@ -1362,7 +1405,7 @@ $(function () {
         const srcs = originals[g];
         $(this).find('.js-lightbox-open').each(function (i) {
           const src = srcs[(i + (page - 1) * 3) % srcs.length];
-          $(this).find('img').first().attr('src', src);
+          setPhoto($(this).find('img').first(), src);   // src + srcset (см. «Помощники»)
           $(this).attr('data-src', src);   // нативно: opener.dataset.src = src
         });
       });
